@@ -1,0 +1,476 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Guest</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+        <!-- <script>
+            function onLoad(){
+                document.getElementById("add").innerHTML ="false";
+            }
+        </script> -->
+    </head>
+    
+    <body>
+        <div class="grid w-full">
+            {% if visibility %}
+                <!-- View guest detail -->
+                <div class="grid content-start min-[1030px]:w-[80%] min-h-screen bg-blue-400 absolute top-[50px] min-[1030px]:left-[10%] p-5 z-20" id="viewBookedDetail">
+                    <div class="w-full flex content-start justify-end">
+                        <button onclick="hideView()">
+                            <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                        </button>
+                    </div>
+                    <div class="bg-white w-full z-20 rounded-md p-10 mt-5 grid">
+                        <div class="grid w-full">
+                            <h1 class="text-center font-bold mb-5 mt-5" >Customer History</h1>
+                            <!-- for small screen -->
+                            {% for x in h %}
+                            <div class="w-full grid min-[1030px]:hidden justify-center content-center mb-5 p-1 rounded-sm shadow-sm bg-gray-300">
+                                <div class="grid p-2">
+                                    <p class="font-bold text-black bg-red-200 p-2">Booking no : {{ x.bookingNumber }}  </p>
+                                    <p class="font-bold text-black bg-red-300 p-2"> Full Name : {{ x.firstName }} {{x.middelName}}  {{x.lastName }}</p>
+                                    <p class="font-bold text-black bg-red-200 p-2"> Room Number :  {{ x.roomNumber }}</p>
+                                    <p class="font-bold text-black bg-red-300 p-2">Floor Type : {{ x.roomType }}</p>
+                                    <p class="font-bold text-black bg-red-200 p-2">Total Room Price :  $ {{ x.totalRoomPrice }}</p>
+                                    <p class="font-bold text-black bg-red-300 p-2">Total Extra Service price : $ {{ x.totalExtraServicePrice }}</p>
+                                    <p class="font-bold text-black bg-red-200 p-2"> Sub Total :  $ {{ x.subTotal}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div>
+                                <p class="text-black font-bold">No result!</p>
+                            </div>
+                            {% endfor %}
+                            <!-- big screen -->
+                            <table class="max-[1030px]:hidden w-full  text-sm text-left text-gray-500 dark:text-gray-400 font-bold">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr class="font-extrabold">
+                                    <th scope="col" class="px-2 py-3  bg-red-200">
+                                        Booking Number
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        Full Name
+                                    </th>
+
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Contact Number
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        Email
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Address
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        Floor Type
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Room Number
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        check In
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Check Out
+                                    </th>
+                                    <!-- <th scope="col" class="px-2 py-3 bg-red-200">
+                                    Action
+                                    </th> -->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for x in h %}
+                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                        <td scope="row" class="px-2 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ x.bookingNumber }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.firstName }} {{ x.middelName }} {{ x.lastName }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.contactNumber }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.email }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.address }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.roomType }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.roomNumber }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.checkIn }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.checkOut }}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td class="text-black font-bold">No result!</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="grid min-[1030px]:grid-cols-12 min-h-screen relative">
+                <!-- Side bar starts here small screen -->
+                <div class="hidden w-[70%] min-h-screen fixed z-50 top-0 content-start bg-[#EEEEEE] shadow-md" id="sidebarlistmobile">
+                    <div class="flex w-full justify-end">
+                        <button onclick="showHideMenu()" class="bg-[#EEEEEE] min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'close.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                    </div>
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <!-- Side bar starts here -->
+                <div class="hidden min-[1030px]:grid col-span-2 content-start bg-[#EEEEEE] shadow-md" id="sidebarlist">
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <div class="grid content-start min-[1030px]:col-span-10 bg-white">
+                     <div class="max-[1030px]:flex hidden">
+                        <button onclick="showSideMenu()" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'menu.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                        <p class="font-bold text-[30px] mb-2 text-gray-400 ml-5">Guest</p>
+                    </div>
+                    <div class="grid min-[1030px]:grid-cols-12 min-[1030px]:justify-end min-[1030px]:content-start bg-[#EEEEEE] w-full pt-5 min-[1030px]:pr-10 min-[1030px]:pl-10 min-[1030px]:pb-10">
+                        <div class="flex content-center min-[1030px]:col-span-7 ">
+                            <div class="grid min-[1030px]:content-center w-full">
+                                <div class="grid min-[1030px]:flex content-center justify-center mt-5 w-full">
+                                    <p class="font-bold text-[30px] mb-2 text-gray-400 mr-5 hidden min-[1030px]:flex">Guest</p>
+                                    <div class="flex content-center justify-center w-full">
+                                        <div class="grid w-full content-center">
+                                            <form method="post" for="searchForm" id="searchForm" class="w-screen min-[1030px]:w-full">  
+                                                <input hidden name="formFor" value="searchForm"/> 
+                                                <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                                    </div>
+                                                    <input type="text" name="search" id="search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#22A39F] focus:border-[#22A39F] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#22A39F] dark:focus:border-[#22A39F] h-[40px]" placeholder="Search Using username..." required>
+                                                    <button type="submit" class="text-white absolute right-2.5 bottom-0.5 bg-[#22A39F] hover:bg-[#22A39F] focus:ring-4 focus:outline-none focus:ring-[#22A39F] font-medium rounded-lg text-sm px-4 py-2 dark:bg-[#22A39F] dark:hover:bg-[#22A39F] dark:focus:ring-[#22A39F]">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <div class="grid min-[1030px]:flex min-[1030px]:justify-end min-[1030px]:content-start w-full min-[1030px]:col-span-5 ">
+                            <div class="grid content-center max-[1030px]:m-5">
+                                <form action="/staffAccount/logout/" method="post" >
+                                    <input hidden name="actionType" value="logout" />
+                                    <button type="submit" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                        Log Out
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="flex min-[1030px]:content-center min-[1030px]:justify-center max-[1030px]:mb-5">
+                                <div class="grid content-center">
+                                    <img src="{% static 'userPic.png' %}" class="bg-cover w-[40px] h-[40px] min-[1030px]:ml-10 rounded-full mr-2 "/>
+                                </div>
+                                <div class="grid content-center">
+                                    <p class="font-bold text-[16px] capitalize">{{staffName}}</p>
+                                    <p class="font-bold text-gray-400 text-[12px] capitalize">{{userTitle}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid min-[1030px]:content-center justify-start min-[1030px]:col-span-4">
+                            <!-- Date and time -->
+                            <p class="font-bold text-[24px] text-black" id="date"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-12 content-start bg-white min-[1030px]:p-5">
+
+                        <div class="grid col-span-12">
+                            
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 font-bold">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                  <tr class="font-extrabold">
+                                    <!-- <th scope="col" class="px-2 py-3  bg-red-200">
+                                        Booking Number
+                                    </th> -->
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        UserName
+                                    </th>
+                                    <!-- <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Contact Number
+                                    </th> -->
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Email
+                                    </th>
+                                    <!-- <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Address
+                                    </th> -->
+                                    <!-- <th scope="col" class="px-2 py-3 bg-red-300">
+                                        Floor Type
+                                    </th> -->
+                                    <!-- <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Room Number
+                                    </th> -->
+                                    <!-- <th scope="col" class="px-2 py-3 bg-red-300">
+                                        check In
+                                    </th> -->
+                                    <!-- <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Check Out
+                                    </th> -->
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                       Action
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for x in guest %}
+                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                        <td class="px-2 py-2">
+                                            {{ x.username }} 
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            {{ x.email }}
+                                        </td>
+                                        <td class="px-2 py-2">
+                                            <form class="flex" method="post" for="filterForm" id="filterForm">
+                                                <input hidden name="filterForm" value="checkOut"/>
+                                                <input hidden name="bookingNumberguestId" value= {{ x.id }} />
+                                                <input hidden name="formFor" value="filterForm"/>
+                                                <div class="grid content-center m-5">
+                                                    <button class="bg-[#22A39F] text-white pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">View History</button>
+                                                </div>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td class="text-black font-bold">No result!</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                              </table>
+                              ​
+                        </div>
+                    </div>
+                    <nav aria-label="Page navigation example" class="flex justify-end ml-5 step-links">
+                        <ul class="flex w-full justify-end -space-x-px mt-10 mb-5">
+                            {% if guest.has_previous %}
+                            <li>
+                                <!-- <a href="?page=1">&laquo; first</a> -->
+                                <a href="?page={{ guest.previous_page_number }}" class="px-3 bg-blue-600 py-2 ml-0 leading-tight text-white border border-gray-300 rounded-l-lg  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">Previous</a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a class="px-3 bg-blue-300 py-2 ml-0 leading-tight text-white border border-gray-300 rounded-l-lg  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" >Previous</a>
+                            </li>
+                            {% endif %}
+                            {% for i in numPageList %}
+                                {%  if i == guest.number %}
+                                <li>
+                                    <a  class="px-3 py-2 leading-tight text-black border border-gray-300   dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{i }}</a>
+                                </li>
+                                {%  else %}
+                                <li>
+                                    <a href="?page={{i}}" class="px-3 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{i }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if guest.has_next %}
+                            <li>
+                                <a href="?page={{ guest.paginator.num_pages }}" class="px-3 py-2 leading-tight text-white bg-blue-600 border border-gray-300 rounded-r-lg dark:border-gray-700 dark:text-gray-400 ">Next</a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a  class="px-3 py-2 leading-tight text-white bg-blue-300 border border-gray-300 rounded-r-lg dark:border-gray-700 dark:text-gray-400 ">Next</a>
+                            </li>              
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    const dd = new Date();
+    document.getElementById("date").innerHTML = dd.toDateString();
+
+    function CreateBooking() {
+        document.getElementById("formView").style.display = 'table-row';
+        <!-- Booking Number -->
+        let yr = d.getFullYear();
+        let mnt = d.getMonth()
+        let dy = d.getDay()
+        let hrs = d.getHours()
+        let mns = d.getMinutes()
+        let sec = d.getMilliseconds()
+        var bookin_No_input = document.getElementById("bookinNoValue");
+        bookingId=yr+''+mnt+''+dy+''+hrs+''+mns+''+sec;
+        bookin_No_input.value = bookingId.toString();
+        document.getElementById("bookin_No").innerHTML =bookingId;
+      }
+
+      function HideCreateBooking(){
+        document.getElementById("formView").style.display = 'none';
+      }
+      function hideView(){
+        document.getElementById("viewBookedDetail").style.display = 'none';
+      }
+      function showView(bookingNumber,firstName,middleName,lastName,contactNumber,email,address,idCardType,idCardNumber,roomNumber,roomType,checkIn,checkOut,paymentStatus,extraServices,total){
+        document.getElementById("viewBookedDetail").style.display = 'grid';
+
+        document.getElementById("bookingNumberVal").innerHTML=bookingNumber;
+        document.getElementById("firstNameVal").innerHTML=firstName;
+        document.getElementById("middleNameVal").innerHTML=middleName;
+        document.getElementById("lastNameVal").innerHTML=lastName;
+        document.getElementById("contactNumberVal").innerHTML=contactNumber;
+        document.getElementById("emailVal").innerHTML=email;
+        document.getElementById("addressVal").innerHTML=address;
+        document.getElementById("idCardTypeVal").innerHTML=idCardType;
+        document.getElementById("idCardNumberVal").innerHTML=idCardNumber;
+        document.getElementById("roomNumberVal").innerHTML=roomNumber;
+        document.getElementById("floorTypeVal").innerHTML=roomType;
+        document.getElementById("checkInVal").innerHTML=checkIn;
+        document.getElementById("checkOutVal").innerHTML=checkOut;
+        document.getElementById("paymentStatusVal").innerHTML=paymentStatus;
+        document.getElementById("extraServicesVal").innerHTML=extraServices;
+        document.getElementById("totalVal").innerHTML=total;
+    }
+        function showHideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+        document.getElementById("sidebarlistmobile").classList.add('hidden')
+    }
+    function showSideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('hidden')
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+    }
+</script>

@@ -1,0 +1,95 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Home</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+    </head>
+    
+    <body>
+        <div class="w-screen min-h-screen">
+            <div class="grid min-[1030px]:flex w-full absolute top-0 left-0 z-30">
+                <div></div>
+                <div class="flex w-full min-[1030px]:justify-end bg-transparent mt-5">
+                    
+                    <a href="#" class="bg-white text-black pl-5 pr-5 h-[50px] content-center grid font-bold rounded-md shadow-md">Home</a>
+
+                    {% if request.user.is_authenticated %} 
+                    <div class="m-2 min-[1030px]:m-5"></div>
+                    <a href="profile" class="bg-white text-black pl-5 pr-5 h-[50px] content-center grid font-bold rounded-md shadow-md">Profile</a>  
+
+                    <div class="m-2 min-[1030px]:m-5"></div>
+                    <form  method="post" >
+                        <input hidden name="actionType" value="logout" />
+                        <button type="submit"  class="bg-white h-[50px] text-black w-[100px] min-[1030px]:w-[150px] rounded-md shadow-lg p-2 font-bold grid justify-center content-center" >
+                            Log Out
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="m-5"></div>
+                        <button class="bg-white text-black w-[150px] rounded-md shadow-lg p-2 font-bold  grid justify-center content-center" >
+                            <a href="/account/registration/">
+                                <div class="flex justify-center">
+                                    <p>Register / Login</p>
+                                </div>
+                            </a>
+                        </button>
+                    {% endif %}
+                    <div class="m-5"></div>
+                </div>
+            </div>
+            <div class="w-full grid relative h-[500px]">
+                <!-- <div class="w-full h-[500px] bg-black opacity-50 absolute top-0 left-0 z-10" ></div> -->
+                <img src="{% static 'homeBg.jpg' %}" class="bg-cover w-screen h-[500px]"/>
+                <div class="w-screen grid justify-center content-start absolute z-20 top-0">
+                    <div class="w-full grid justify-center content-start pt-20">
+                        <h1 class="text-[20px] md:text-[40px] font-bold text-white uppercase" >Enjoy your time with the Best Hotel Service</h1>
+                        <h1 class="text-[20px] md:text-[40px] font-bold text-yellow-400 uppercase text-center " >and hotel rooms</h1>
+                    </div>
+                    <div class="bg-[#D61355] min-[1030px]:w-[500px] h-[200px] mt-20 rounded-md shadow-md grid justify-center content-center p-10">
+                        <h3 class="text-white font-bold text-[30px] text-center">Choose your room</h3>
+                        {% if request.user.is_authenticated %}  
+                            <form  method="post">
+                                <input hidden name="actionType" value="book" />
+                                <button type="submit" class="bg-black text-white w-[100px] rounded-md shadow-lg p-2 font-bold mt-5" >Book Now</button> 
+                            </form> 
+                        {% else %}
+                            <form  method="post">
+                                <input hidden name="actionType" value="register" />
+                                <button type="submit" class="bg-black text-white w-[100px] rounded-md shadow-lg p-2 font-bold mt-5" >Book Now</button> 
+                            </form>                         {% endif %} 
+                    </div>
+                </div>
+            </div>
+            <div class="w-full grid min-h-screen bg-gray-300 min-[1030px]:p-10">
+                <div class="grid w-full justify-center content-start bg-white rounded-lg shadow-lg p-10">
+                    <h1 class="text-black text-[50px] font-bold text-center">Welcome To Hotel</h1>
+                    <div class="w-full p-10 flex justify-center content-start">
+                        <p class="text-red-600 text-center font-bold">Welcome to your home away from home! Our hotel room is designed to provide you with comfort, convenience, and a touch of luxury during your stay. With a spacious layout and thoughtful amenities, you'll have everything you need to relax and recharge after a long day of exploration or work.</p>
+                    </div>
+                </div>
+                <div class="grid w-full justify-center content-start bg-white rounded-lg shadow-lg p-10 mt-10">
+                    <h1 class="text-black text-[50px] font-bold text-center">Our Rooms</h1>
+                    <div class="flex justify-center">
+                        <div class="flex flex-wrap w-full justify-start mt-10">
+                            <img src="{% static 'floor1.jpg' %}" class="bg-cover w-full h-[450px]" />
+                            <img src="{% static 'floor2.jpg' %}" class="bg-cover w-full h-[450px]" />
+                            <img src="{% static 'floor3.jpg' %}" class="bg-cover w-full h-[450px]" />
+                            <img src="{% static 'floor4.jpg' %}" class="bg-cover w-full h-[450px]" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    
+</script>

@@ -1,0 +1,401 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Reservation</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+    </head>
+    
+    <body>
+        <div class="grid w-full">
+
+            <div class="grid min-[1030px]:grid-cols-12 min-h-screen relative">
+                <!-- Side bar starts here small screen -->
+                <div class="hidden w-[70%] min-h-screen fixed z-50 top-0 content-start bg-[#EEEEEE] shadow-md" id="sidebarlistmobile">
+                    <div class="flex w-full justify-end">
+                        <button onclick="showHideMenu()" class="bg-[#EEEEEE] min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'close.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                    </div>
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-white font-bold ml-3 pt-1">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                <!-- Side bar starts here -->
+                <div class="hidden min-[1030px]:grid col-span-2 content-start bg-[#EEEEEE] shadow-md" id="sidebarlist">
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-white font-bold ml-3 pt-1">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <div class="grid content-start min-[1030px]:col-span-10 bg-white">
+                    <div class="max-[1030px]:flex hidden">
+                        <button onclick="showSideMenu()" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'menu.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                        <p class="font-bold text-[30px] mb-2 text-gray-400 ml-5">Reservation</p>
+                    </div>
+                    <div class="grid min-[1030px]:grid-cols-12 min-[1030px]:justify-end min-[1030px]:content-start bg-[#EEEEEE] w-full pt-5 pr-10  pl-10">
+                        <div class="flex content-center min-[1030px]:col-span-7 ">
+                            <div class="grid content-center w-full">
+                                <div class="hidden min-[1030px]:flex content-center justify-center mt-5 w-full">
+                                    <p class="font-bold text-[30px] mb-2 text-gray-400 mr-5">Reservation</p>
+                                    <div class="flex content-center justify-center w-full">
+                                    </div>
+                                </div>
+                                <div class="grid min-[1030px]:content-center justify-start min-[1030px]:col-span-4">
+                                    <!-- Date and time -->
+                                    <p class="font-bold text-[24px] text-black" id="date"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid min-[1030px]:flex min-[1030px]:justify-end min-[1030px]:content-start w-full min-[1030px]:col-span-5 ">
+                            <div class="grid content-center max-[1030px]:m-5">
+                                <form action="/staffAccount/logout/" method="post" >
+                                    <input hidden name="actionType" value="logout" />
+                                    <button type="submit" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                        Log Out
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="flex min-[1030px]:content-center min-[1030px]:justify-center max-[1030px]:mb-5">
+                                <div class="grid content-center">
+                                    <img src="{% static 'userPic.png' %}" class="bg-cover w-[40px] h-[40px] min-[1030px]:ml-10 rounded-full mr-2 "/>
+                                </div>
+                                <div class="grid content-center">
+                                    <p class="font-bold text-[16px] capitalize">{{staffName}}</p>
+                                    <p class="font-bold text-gray-400 text-[12px] capitalize">{{userTitle}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="min-[1030px]:p-5 w-full bg-[#EEEEEE] grid  content-center min-[1030px]:pl-10">
+                        <div class="grid grid-cols-12 content-start">
+                            <div class="grid content-center justify-start col-span-4">
+                                <!-- Date and time -->
+                                <p class="font-bold text-[24px] text-black" id="date"></p>
+                            </div>
+                        </div>  
+                    </div>
+
+                    <div class="grid content-start bg-white">
+                        <div class="w-full grid mt-10 pl-10 pr-10 bg-white">
+                            <form class="w-full grid" method="post" for="reservationForm" id="reservationForm">
+                                {% csrf_token %}
+                                <div class="grid">
+                                    <p class="text-left mt-2 mb-10 text-[28px] font-bold">Room Information</p>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div class="relative z-0 w-full mb-10 mr-5">
+                                            <label for="roomType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room Type</label>
+                                            <select onchange="getSelectedValue()"  id="roomType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option selected>----</option>
+                                                {% for floor in floors %}
+                                                    <option value='{{ floor.floorType }}'>{{ floor.floorType }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="relative z-0 w-full mb-10 mr-5">
+                                            <label for="roomNumber" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room Number</label>
+                                            <select onchange="getSelectedRoomValue()" id="roomNumberSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option selected>----</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div class="relative z-0 w-full mb-10 mr-5">
+                                            <input name="formType" value="reservationData" hidden />
+                                            <input type="date" name="floating_check_in" id="floating_check_in" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_check_in" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Check-In</label>
+                                        </div>
+                                        <div class="relative z-0 w-full mb-10">
+                                            <input type="date" name="floating_check_out" id="floating_check_out" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_check_out" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Check-Out</label>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div class="relative z-0 w-full mb-10 mr-5">
+                                            <label for="extraServicesId" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Extra Services</label>
+                                            <select onchange="getExtraServices()" id="extraServicesId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option value="None" selected>----</option>
+                                                {% for e in extraServices%}
+                                                    <option value={{e.id}}>{{e.serviceType}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-left mt-2 mb-10 text-[28px] font-bold">Customer Details</p>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="relative z-0 w-full mb-10 mr-5">
+                                        <input type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                        <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">First Name</label>
+                                    </div>
+                                    <div class="relative z-0 w-full mb-10">
+                                        <input type="text" name="floating_middle_name" id="floating_middle_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                        <label for="floating_middle_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Middle Name</label>
+                                    </div>
+                                    <div class="relative z-0 w-full mb-10">
+                                        <input type="text" name="floating_last_name" id="floating_last_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                        <label for="floating_last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Last Name</label>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-2 mt-5">
+                                    <div class="relative z-0 w-full mb-10 mr-5">
+                                        <input type="text" name="floating_contact_number" id="floating_contact_number" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                        <label for="floating_contact_number" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Contact Number</label>
+                                    </div>
+                                    <div class="relative z-0 w-full mb-10">
+                                        <input type="email" name="floating_email" id="floating_email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                        <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Email Address</label>
+                                    </div>
+                                    <div class="relative z-0 w-full mb-10">
+                                        <input type="text" name="floating_address" id="floating_address" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                        <label for="floating_address" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Residential Address</label>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 ">
+                                    <div class="relative z-0 w-full mb-10 mr-5">
+                                        <label for="idChoice" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Id Card Type</label>
+                                        <select onchange="getSelectedIdCardTypeValue()" id="idChoice" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <option selected>----</option>
+                                            <option value="national id card">National Id Card</option>
+                                            <option value="passport">Passport</option>
+                                            <option value="driver license">Driver License</option>
+                                        </select>
+                                    </div>
+                                    <div class="relative z-0 w-full mb-10 mt-7 ml-5">
+                                        <input type="text" name="floating_selected_id_card_number" id="floating_selected_id_card_number" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                        <label for="floating_selected_id_card_number" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Selected Id Card Number</label>
+                                    </div>
+                                </div>
+                                <input name="extraServiceSelected" value="None" id="extraServiceSelected" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                                <input name="bookingNumber" value="" id="bookingNumber" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                                <input name="roomTypeSelectedValue" value="" id="roomTypeSelectedValue" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                                <input name="roomNumberSelectedValue" value="" id="roomNumberSelectedValue" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                                <input name="idChoiceSelectedValue" value="" id="idChoiceSelectedValue" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;" required/>
+                                <button type="submit"  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    const d = new Date();
+    document.getElementById("date").innerHTML = d.toDateString();
+
+    function getSelectedValue(){
+        var e = document.getElementById("roomType");
+        var selectedValue = e.options[e.selectedIndex].text;
+
+
+        var floorTypeInput = document.getElementById("roomTypeSelectedValue");
+        floorTypeInput.value = selectedValue;
+
+        var select = document.getElementById("roomNumberSelect");
+
+        function removeAllChildNodes(parent) {
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+        }
+        removeAllChildNodes(select);
+        getData(selectedValue)
+    }
+
+    function getSelectedRoomValue(){
+        var e = document.getElementById("roomNumberSelect");
+        var roomNumber = e.options[e.selectedIndex].text;
+
+        var floorNumberInput = document.getElementById("roomNumberSelectedValue");
+        floorNumberInput.value = roomNumber;
+    }
+
+    function getExtraServices(){
+        var e = document.getElementById("extraServicesId");
+        var idCardType = e.options[e.selectedIndex].value;
+
+        var extra_service_input = document.getElementById("extraServiceSelected");
+
+        extra_service_input.value = idCardType;
+    }
+    function getSelectedIdCardTypeValue(){
+        const d = new Date();
+        let yr = d.getFullYear();
+        let mnt = d.getMonth()
+        let dy = d.getDay()
+        let hrs = d.getHours()
+        let mns = d.getMinutes()
+        let sec = d.getMilliseconds()
+        var bookin_No_input = document.getElementById("bookingNumber");
+        bookingId=yr+''+mnt+''+dy+''+hrs+''+mns+''+sec;
+        bookin_No_input.value = bookingId.toString();
+
+        var e = document.getElementById("idChoice");
+        var idCardType = e.options[e.selectedIndex].text;
+
+        var idCardTypeInput = document.getElementById("idChoiceSelectedValue");
+        idCardTypeInput.value = idCardType;
+    }
+
+    function getData(selectedValue){
+        var csrf = $("input[name=csrfmiddlewaretoken]").val();
+        $.ajax({                       
+            url: '',       
+            type:'post',
+            data: {
+                'formType':'ajax',
+                'floorType': selectedValue ,
+                'csrfmiddlewaretoken' : csrf
+            },
+            success: function (data) {   
+                var option = document.createElement("option");
+                option.text = "----";
+                option.value = '';
+                var select = document.getElementById("roomNumberSelect");
+                select.appendChild(option);
+                
+                var db = JSON.stringify(data.floorType);
+                var as = JSON.parse(db);
+                as.forEach(myFunction);
+                
+                function myFunction(value, index, array) {
+                    var option = document.createElement("option");
+                    option.text = value;
+                    option.value = value;
+                    var select = document.getElementById("roomNumberSelect");
+                    select.appendChild(option);
+                }
+
+            }
+        });
+    }
+    function showHideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+        document.getElementById("sidebarlistmobile").classList.add('hidden')
+    }
+    function showSideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('hidden')
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+    }
+</script>

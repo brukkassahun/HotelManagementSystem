@@ -1,0 +1,251 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Dashboard</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+    </head>
+    
+    <body>
+        <div class="grid w-full">
+
+            <div class="grid min-[1030px]:grid-cols-12 min-h-screen relative">
+
+                <!-- Side bar starts here small screen -->
+                <div class="hidden w-[70%] min-h-screen fixed z-50 top-0 content-start bg-[#EEEEEE] shadow-md" id="sidebarlistmobile">
+                    <div class="flex w-full justify-end">
+                        <button onclick="showHideMenu()" class="bg-[#EEEEEE] min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'close.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                    </div>
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-white font-bold ml-3 pt-1">dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+
+                <!-- Side bar starts here big screen -->
+                <div class="hidden min-[1030px]:grid col-span-2 content-start bg-[#EEEEEE] shadow-md" id="sidebarlist">
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-white font-bold ml-3 pt-1">dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <div class="grid content-start min-[1030px]:col-span-10 bg-white">
+                    <div class="max-[1030px]:flex hidden">
+                        <button onclick="showSideMenu()" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'menu.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                        <p class="font-bold text-[30px] mb-2 text-gray-400 ml-5">Dashboard</p>
+                    </div>
+                    <div class="grid min-[1030px]:grid-cols-12 min-[1030px]:justify-end min-[1030px]:content-start bg-[#EEEEEE] w-full pt-5 pr-10  pl-10">
+                        <div class="flex content-center min-[1030px]:col-span-7 ">
+                            <div class="grid content-center w-full">
+                                <div class="hidden min-[1030px]:flex content-center justify-center mt-5 w-full">
+                                    <p class="font-bold text-[30px] mb-2 text-gray-400 mr-5">Dashboard</p>
+                                    <div class="flex content-center justify-center w-full">
+
+                                    </div>
+                                </div>
+                                <div class="grid min-[1030px]:content-center justify-start min-[1030px]:col-span-4">
+                                    <!-- Date and time -->
+                                    <p class="font-bold text-[24px] text-black" id="date"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid min-[1030px]:flex min-[1030px]:justify-end min-[1030px]:content-start w-full min-[1030px]:col-span-5 ">
+                            <div class="grid content-center max-[1030px]:m-5">
+                                <form action="/staffAccount/logout/" method="post" >
+                                    <input hidden name="actionType" value="logout" />
+                                    <button type="submit" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                        Log Out
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="flex min-[1030px]:content-center min-[1030px]:justify-center max-[1030px]:mb-5">
+                                <div class="grid content-center">
+                                    <img src="{% static 'userPic.png' %}" class="bg-cover w-[40px] h-[40px] min-[1030px]:ml-10 rounded-full mr-2 "/>
+                                </div>
+                                <div class="grid content-center">
+                                    <p class="font-bold text-[16px] capitalize">{{staffName}}</p>
+                                    <p class="font-bold text-gray-400 text-[12px] capitalize">{{userTitle}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="min-[1030px]:p-5 w-full bg-[#EEEEEE] grid  content-center min-[1030px]:pl-10">
+                        <div class="grid grid-cols-12 content-start">
+                            <div class="grid content-center justify-start col-span-4">
+                                <!-- Date and time -->
+                                <p class="font-bold text-[24px] text-black" id="date"></p>
+                            </div>
+                        </div>  
+                    </div>
+
+                    <div class="grid content-start w-full min-h-screen pt-5 min-[1030px]:pl-10 min-[1030px]:pr-10 bg-gray-300">
+                        <div class="flex justify-center min-[1030px]:justify-start flex-wrap w-full  min-[1030px]:content-start mb-5">
+                             <div class="grid  w-[200px] p-2 h-[200px] m-2 bg-white shadow-md rounded-md">
+                                 <p class="font-bold text-[22px] text-center">Total Number of Floor Types</p>
+                                 <p class="font-bold text-[30px] text-center text-white p-2 bg-yellow-500">{{floorCount}}</p>
+                             </div>
+                             <div class="grid  w-[200px] p-2 h-[200px] m-2 bg-white shadow-md rounded-md">
+                                 <p class="font-bold text-[22px] text-center">Total Number of Rooms</p>
+                                 <p class="font-bold text-[30px] text-center text-white p-2 bg-yellow-500">{{roomCount}}</p>
+                             </div>
+                             <div class="grid  w-[200px] p-2 h-[200px] m-2 bg-white shadow-md rounded-md">
+                                 <p class="font-bold text-[22px] text-center">Total Number of Reservations</p>
+                                 <p class="font-bold text-[30px] text-center text-white p-2 bg-yellow-500">{{reservationCount}}</p>
+                             </div>
+                             <div class="grid  w-[200px] p-2 h-[200px] m-2 bg-white shadow-md rounded-md">
+                                 <p class="font-bold text-[22px] text-center">Total Number of Staffs</p>
+                                 <p class="font-bold text-[30px] text-center text-white p-2 bg-yellow-500">{{staffCount}}</p>
+                             </div>
+                             <div class="grid  w-[200px] p-2 h-[200px] m-2 bg-white shadow-md rounded-md">
+                                 <p class="font-bold text-[22px] text-center">Total Number of current Booked Rooms</p>
+                                 <p class="font-bold text-[30px] text-center text-white p-2 bg-yellow-500">{{bookedRoomCount}}</p>
+                             </div>
+                             <div class="grid  w-[200px] p-2 h-[200px] m-2 bg-white shadow-md rounded-md">
+                                 <p class="font-bold text-[22px] text-center">Total Number of current Available Rooms</p>
+                                 <p class="font-bold text-[30px] text-center text-white p-2 bg-yellow-500">{{availableCount}}</p>
+                             </div>
+                             <div class="grid  w-[200px] p-2 h-[200px] m-2 bg-white shadow-md rounded-md">
+                                 <p class="font-bold text-[22px] text-center">Total Number of check ins</p>
+                                 <p class="font-bold text-[30px] text-center text-white p-2 bg-yellow-500">{{totalCheckIn}}</p>
+                             </div>
+                             <div class="grid  w-[200px] p-2 h-[200px] m-2 bg-white shadow-md rounded-md">
+                                 <p class="font-bold text-[22px] text-center">Total Earnings</p>
+                                 <p class="font-bold text-[30px] text-center text-white p-2 bg-yellow-500">${{totalEarnings}}</p>
+                             </div>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+ <script>
+    const d = new Date();
+    document.getElementById("date").innerHTML = d.toDateString();
+    function showHideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+        document.getElementById("sidebarlistmobile").classList.add('hidden')
+    }
+    function showSideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('hidden')
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+    }
+</script>

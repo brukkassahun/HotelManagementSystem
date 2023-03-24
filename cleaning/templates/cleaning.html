@@ -1,0 +1,438 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Cleaning</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+    </head>
+    <body>
+        <div class="grid w-full">
+             <!-- clean() conform -->
+             <div class="hidden content-start w-full  min-[1030px]:w-[80%] h-[400px] bg-blue-400 absolute min-[1030px]:top-[50px]  min-[1030px]:left-[10%]  min-[1030px]:p-5 z-20" id="conformClean">
+                <button onclick="hideClean()">
+                    <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                </button>
+                <div class="bg-white min-[1030px]:p-10 grid content-center justify-center">
+                    <div class="flex justify-start text-[24px]">
+                        <P class="text-black font-bold mr-2">Do you want to change room cleaninig status to Clean ?</P>
+                    </div>
+                    <div class="flex min-[1030px]:justify-center mt-5 text-white font-bold p-5">
+                        <form method="post" for="conformCleanForm" id="conformCleanForm">
+                            {% csrf_token %}
+                            <input type="text" name="formFor" value="conformCleanForm" hidden />
+                            <input name="inputRoomIdCeanVal" id="inputRoomIdCeanVal" />
+                            <button type="submit" class="bg-blue-400 w-[50px] p-2 rounded-md mr-5" >Yes</button>
+                        </form>
+                        <button class="bg-red-600 w-[60px] p-2 rounded-md" onclick="hideClean()">Cancel</button>
+                    </div>
+                </div>
+             </div>
+
+            <!--dirty() conform -->
+            <div class="hidden pb-10 content-start w-full min-[1030px]:w-[80%] min-[1030px]:h-[400px] bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="conformDirty">
+                <button onclick="hideDirty()">
+                    <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                </button>
+                <div class="bg-white min-[1030px]:p-10 grid content-center justify-center">
+                    <div class="flex justify-start text-[24px]">
+                        <P class="text-black font-bold mr-2">Do you want to change room cleaninig status to Dirty ?</P>
+                    </div>
+                    <div class="flex min-[1030px]:justify-center mt-5 text-white font-bold p-5">
+                        <form method="post" for="conformDirtyForm" id="conformDirtyForm">
+                            {% csrf_token %}
+                            <input type="text" name="formFor" value="conformDirtyForm" hidden />
+                            <input name="inputRoomIdDirtyVal" id="inputRoomIdDirtyVal" />
+                            <button type="submit" class="bg-blue-400 w-[50px] p-2 rounded-md mr-5" >Yes</button>
+                        </form>
+                        <button class="bg-red-600 w-[60px] p-2 rounded-md" onclick="hideDirty()">Cancel</button>
+                    </div>
+                </div>
+             </div>
+
+             <div class="grid min-[1030px]:grid-cols-12 min-h-screen relative">
+
+                <!-- Side small screen bar starts here -->
+                <div class="hidden w-[250px] min-h-screen fixed z-50 top-0 content-start bg-[#EEEEEE] shadow-md" id="sidebarlistmobile">
+                    <div class="flex w-full justify-end">
+                        <button onclick="showHideMenu()" class="bg-[#EEEEEE] min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'close.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                    </div>
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    {% if userTitle == 'receptionist' or userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/dashboard'
+                        >
+                            <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/reservation'
+                        >
+                            <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/room'
+                        >
+                            <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/guest'
+                        >
+                            <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/booked'
+                        >
+                            <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                            href='/stuff/cleaning'
+                        >
+                            <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="font-bold ml-3 pt-1 text-white">Cleaning</p>
+                        </a>
+                        {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                {% elif userTitle == 'cleaner' %}
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                        href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Cleaning</p>
+                    </a>
+                {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                <!-- Side bar starts here -->
+                <div class="hidden min-[1030px]:grid col-span-2 content-start bg-[#EEEEEE] shadow-md" id="sidebarlist">
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    {% if userTitle == 'receptionist' or userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/dashboard'
+                        >
+                            <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/reservation'
+                        >
+                            <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/room'
+                        >
+                            <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/guest'
+                        >
+                            <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/booked'
+                        >
+                            <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                        </a>
+                        <a 
+                            class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                            href='/stuff/cleaning'
+                        >
+                            <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="font-bold ml-3 pt-1 text-white">Cleaning</p>
+                        </a>
+                        {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                {% elif userTitle == 'cleaner' %}
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                        href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Cleaning</p>
+                    </a>
+                {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <div class="grid content-start col-span-10 bg-white">
+                    <div class="grid content-start min-[1030px]:col-span-10 bg-white">
+                        <div class="max-[1030px]:flex hidden">
+                            <button onclick="showSideMenu()" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                <img src="{% static 'menu.png' %}" class="w-[40px] h-[40px]" />
+                            </button>
+                            <p class="font-bold text-[30px] mb-2 text-gray-400 ml-5">Cleaning</p>
+                        </div>
+                    <div class="grid grid-cols-12 justify-end content-start bg-[#EEEEEE] w-full pt-5 pr-10 pl-10">
+                        <div class="hidden min-[1030px]:flex content-center col-span-7 ">
+                            <div class="grid content-center w-full">
+                                <div class="flex content-center justify-center mt-5 w-full">
+                                    <p class="font-bold text-[30px] mb-2 text-gray-400 mr-5">Cleaning</p>
+                                    <div class="flex content-center justify-center w-full">
+                                        <div class="grid w-full content-center">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid min-[1030px]:flex min-[1030px]:justify-end min-[1030px]:content-start w-full min-[1030px]:col-span-5 ">
+                            <div class="grid content-center max-[1030px]:m-5">
+                                <form action="/staffAccount/logout/" method="post" >
+                                    <input hidden name="actionType" value="logout" />
+                                    <button type="submit" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                        Log Out
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="flex min-[1030px]:content-center min-[1030px]:justify-center max-[1030px]:mb-5">
+                                <div class="grid content-center">
+                                    <img src="{% static 'userPic.png' %}" class="bg-cover w-[40px] h-[40px] min-[1030px]:ml-10 rounded-full mr-2 "/>
+                                </div>
+                                <div class="grid content-center">
+                                    <p class="font-bold text-[16px] capitalize">{{staffName}}</p>
+                                    <p class="font-bold text-gray-400 text-[12px] capitalize">{{userTitle}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="min-[1030px]:h-[110px] w-full bg-[#EEEEEE] grid  min-[1030px]:content-center pl-10 max-[1030px]:pb-5">
+                        <div class="grid min-[1030px]:grid-cols-12 min-[1030px]:content-start">
+                            <div class="grid content-center justify-start min-[1030px]:col-span-2">
+                                <p class="font-bold text-[24px] text-black" id="date"></p>
+                            </div>
+                            <div class="flex flex-wrap min-[1030px]:content-center min-[1030px]:justify-end min-[1030px]:col-span-10 min-[1030px]:pr-10">
+                                <div class="grid content-center justify-center">
+                                    <div class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] text-white">
+                                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[20px] mt-3"/>
+                                        <!-- <p class="ml-3 font-bold">All room</p> -->
+                                        <form class="flex" method="post" for="filterFormSelect" id="filterFormSelect">
+                                            <input hidden name="formFor" value="filterFormSelect"/>
+                                            <input hidden name="filterFormSelectValue" id="filterFormSelectValue"/>
+                                            <select onchange="getSelectedValue()"  id="filterSelectedType" class="bg-gray-50 ml-2 border uppercase border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                {% if selectStyle == 'All room'%}
+                                                    <option selected value="All room">All room</option>
+                                                {% endif %}
+                                                {% if selectStyle != 'All room'%}
+                                                    <option selected value="All room">All room</option>
+                                                {% endif %}
+                                                {% for floor in floors %}
+                                                    {% if selectStyle == floor.floorType %}
+                                                        <option selected value='{{ floor.floorType }}'>{{ floor.floorType }}</option>
+                                                    {% else %}
+                                                        <option value='{{ floor.floorType }}'>{{ floor.floorType }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="grid content-center m-5">
+                                    <div class="border-[1px] border-gray-300 h-[30px] place-content-center"></div>
+                                </div>
+                                <form class="flex" method="post" for="filterForm" id="filterForm">
+                                    <input hidden name="filterFormVal" value="all"/>
+                                    <input hidden name="formFor" value="filterForm"/>
+                                    <div class="grid content-center m-5">
+                                        {% if buttonStyle == 'all' %}
+                                            <button class="bg-[#22A39F] text-white pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">All</button>
+                                        {% else %}
+                                            <button class="bg-white text-black pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">All</button>
+                                        {% endif %}
+                                    </div>
+                                </form>
+
+                                <form class="flex" method="post" for="filterForm" id="filterForm">
+                                    <input hidden name="filterFormVal" value="clean"/>
+                                    <input hidden name="formFor" value="filterForm"/>
+                                    <div class="grid content-center">
+                                        {% if buttonStyle == 'clean' %}
+                                            <button class="bg-[#22A39F] text-white pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">Clean</button>
+                                        {% else %}
+                                            <button class="bg-white text-black pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">Clean</button>
+                                        {% endif %}
+                                    </div>
+                                </form>
+                                <form class="flex" method="post" for="filterForm" id="filterForm">
+                                    <input hidden name="filterFormVal" value="dirty"/>
+                                    <input hidden name="formFor" value="filterForm"/>
+                                    <div class="grid content-center m-5">
+                                        {% if buttonStyle == 'dirty' %}
+                                            <button class="bg-[#22A39F] text-white pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">Dirty</button>
+                                        {% else %}
+                                            <button class="bg-white text-black pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">Dirty</button>
+                                        {% endif %}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>  
+                    </div>
+
+                    <div class="grid grid-cols-12 content-start bg-white">
+
+                        <div class="grid col-span-12">
+                            
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                  <tr>
+                                    <th scope="col" class="px-2 py-3  bg-red-300">
+                                        Floor Type
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Room Number
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        Room Status
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Action
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for x in rooms %}
+                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 uppercase">
+                                        <td class="px-3 py-3">
+                                            {{ x.floorType }}
+                                        </td>
+                                        <td class="px-3 py-3">
+                                            {{ x.roomNumber }}
+                                        </td>
+                                        <td class="px-3 py-3">
+                                            {{ x.clean }}
+                                        </td>
+                                        <td class="px-3 py-3">
+                                            <div class="flex flex-wrap justify-end">
+                                                {% if x.clean == 'dirty' %}
+                                                    <button class="m-2 bg-blue-600 text-white font-bold p-2 rounded-md" onclick="showClean(id='{{x.id}}')">Cleaned</button>
+                                                {% else %}
+                                                    <button class="m-2 bg-blue-300 text-white font-bold p-2 rounded-md" disabled >Cleaned</button>
+                                                {% endif %}
+
+                                                {% if x.clean == 'clean' %}
+                                                    <button class="m-2 bg-red-600 text-white font-bold p-2 rounded-md" onclick="showDirty(id='{{x.id}}')">Dirty</button>
+                                                {% else %}
+                                                    <button class="m-2 bg-red-300 text-white font-bold p-2 rounded-md" disabled >Dirty</button>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td class="text-black font-bold">No result!</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                              </table>
+                              ​
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    const d = new Date();
+    document.getElementById("date").innerHTML = d.toDateString();
+
+    function getSelectedValue(){
+        var e = document.getElementById("filterSelectedType");
+        var selectedValue = e.options[e.selectedIndex].text;
+
+        var filterVal = document.getElementById("filterFormSelectValue");
+        filterVal.value = selectedValue;
+
+        document.getElementById("filterFormSelect").submit();
+    }
+    
+    function hideClean(){
+        enableScrolling()
+        document.getElementById("conformClean").style.display = 'none';
+    }
+    function hideDirty(){
+        enableScrolling()
+        document.getElementById("conformDirty").style.display = 'none';
+    }
+
+    function showClean(id){
+        disableScrolling()
+        document.getElementById("inputRoomIdCeanVal").value = id;
+        document.getElementById("conformClean").style.display = 'grid';
+    }
+    function showDirty(id){
+        disableScrolling()
+        document.getElementById("inputRoomIdDirtyVal").value = id;
+        document.getElementById("conformDirty").style.display = 'grid';
+    }
+
+    function disableScrolling() {
+        TopScroll =0;
+        LeftScroll =0,
+        window.scrollTo(LeftScroll, TopScroll);
+        window.onscroll = function() {
+            window.scrollTo(LeftScroll, TopScroll);
+        };
+    }
+        
+    function enableScrolling() {
+    window.onscroll = function() {};
+    }
+    function showHideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+        document.getElementById("sidebarlistmobile").classList.add('hidden')
+    }
+    function showSideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('hidden')
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+    }
+</script>

@@ -1,0 +1,132 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Profile</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+    </head>
+    
+    <body>
+        <div class="w-screen min-h-screen p-2 min-[1030px]:p-10 bg-gray-400">
+            <div class="flex w-full bg-transparent mb-10">
+                <div></div>
+                <div class="flex h-[55px] bg-transparent w-full justify-end ">
+                    
+                    <a class="bg-white text-black pl-5 pr-5 h-[50px] content-center grid font-bold rounded-md shadow-md" href="/home">Home</a>
+                    <div class="m-5"></div>
+                    <form  method="post" >
+                        <input hidden name="actionType" value="logout" />
+                        <button type="submit" class="bg-white h-[50px] text-black w-[150px] rounded-md shadow-lg p-2 font-bold grid justify-center content-center" >
+                            Log Out
+                        </button>
+                    </form>
+                    <div class="m-5"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-md shadow-md mb-10 p-10 w-full grid">
+                <p class="mb-5 text-[20px] font-bold">User Name: {{request.user.username}}</p>
+                <p class="mb-5 text-[20px] font-bold">Email Address: {{request.user.email}}</p>
+            </div>
+            <div class="grid content-start w-full bg-white p-10 min-h-screen rounded-md shadow-md">   
+                <h1 class="mb-5 text-[30px] font-bold">Booking List</h1>  
+                {% for x in booking %}
+                <div class="w-full grid min-[1030px]:hidden justify-center content-center mb-5 p-1 rounded-sm shadow-sm bg-gray-300">
+                    <div class="grid p-2">
+                        <p class="font-bold text-black bg-red-200 p-2">Booking no : {{ x.bookingNumber }}  </p>
+                        <p class="font-bold text-black bg-red-300 p-2"> Full Name : {{ x.firstName }} {{x.middelName}}  {{x.lastName }}</p>
+                        <p class="font-bold text-black bg-red-200 p-2"> Room Number :  {{ x.roomNumber }}</p>
+                        <p class="font-bold text-black bg-red-300 p-2">Floor Type : {{ x.roomType }}</p>
+                        <p class="font-bold text-black bg-red-200 p-2">Total Room Price :  $ {{ x.totalRoomPrice }}</p>
+                        <p class="font-bold text-black bg-red-300 p-2">Total Extra Service price : $ {{ x.totalExtraServicePrice }}</p>
+                        <p class="font-bold text-black bg-red-200 p-2"> Sub Total :  $ {{ x.subTotal}}</p>
+                    </div>
+                </div>  
+                {% empty %}
+                <div>
+                    <p class="text-black font-bold">No result!</p>
+                </div>
+            {% endfor %}
+                <table class="w-full max-[1030px]:hidden text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                        <th scope="col" class="px-2 py-3  bg-red-300">
+                            Booking no.
+                        </th>
+                        <th scope="col" class="px-2 py-3 bg-red-200">
+                            Full Name
+                        </th>
+                        <th scope="col" class="px-2 py-3 bg-red-300">
+                            Room Number
+                        </th>
+                        <th scope="col" class="px-2 py-3 bg-red-200">
+                            Floor Type
+                        </th>
+                        <th scope="col" class="px-2 py-3 bg-red-300">
+                           Check In
+                        <th scope="col" class="px-2 py-3 bg-red-200">
+                            Check Out
+                        </th>
+                        <th scope="col" class="px-2 py-3 bg-red-300">
+                            Total Room Price
+                        </th>
+                        <th scope="col" class="px-2 py-3 bg-red-200">
+                            Total Extra Service Price
+                        </th>
+                        <th scope="col" class="px-2 py-3 bg-red-300">
+                            SubTotal
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in booking %}
+                        <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 uppercase">
+                            <td scope="row" class="px-3 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ x.bookingNumber }}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ x.firstName }} {{x.middelName}}  {{x.lastName }} 
+                            </td>
+                            <td class="px-3 py-3">
+                                {{ x.roomNumber }}
+                            </td>
+                            <td class="px-3 py-3">
+                                {{ x.roomType }}
+                            </td>
+                            <td class="px-3 py-3">
+                                {{ x.checkIn }}
+                            </td>
+                            <td class="px-3 py-3">
+                                {{ x.checkOut }}
+                            </td>
+                            <td class="px-10 py-3">
+                                {{ x.totalRoomPrice }}
+                            </td>
+                            <td class="px-10 py-3">
+                                {{ x.totalExtraServicePrice }}
+                            </td>
+                            <td class="px-10 py-3">
+                                {{ x.subTotal }}
+                            </td>
+
+
+                        </tr>
+                        {% empty %}
+                            <tr>
+                                <td class="text-black font-bold">No result!</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    
+</script>

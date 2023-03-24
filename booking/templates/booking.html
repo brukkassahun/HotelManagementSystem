@@ -1,0 +1,245 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Booked</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+        <!-- <script>
+            function onLoad(){
+                document.getElementById("add").innerHTML ="false";
+            }
+        </script> -->
+    </head>
+    
+    <body>
+        <div class="grid w-full">
+
+            <div class="grid grid-cols-12 min-h-screen">
+
+                <!-- Side bar starts here -->
+                <div class="grid col-span-2 content-start bg-[#EEEEEE] shadow-md">
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/stuff'
+                    >
+                        <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                    </a>
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <div class="grid content-start col-span-10 bg-white">
+ 
+                    <div class="grid grid-cols-12 justify-end content-start bg-[#EEEEEE] w-full pt-5 pr-10 pl-10">
+                        <div class="flex content-center col-span-7 ">
+                            <div class="grid content-center w-full">
+                                <div class="flex content-center justify-center mt-5 w-full">
+                                    <p class="font-bold text-[30px] mb-2 text-gray-400 mr-5">Booking</p>
+                                    <div class="flex content-center justify-center w-full">
+                                        <div class="grid w-full content-center">
+                                            <form>   
+                                                <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                                    </div>
+                                                    <input type="search" id="search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#22A39F] focus:border-[#22A39F] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#22A39F] dark:focus:border-[#22A39F] h-[40px]" placeholder="Search here..." required>
+                                                    <button type="submit" class="text-white absolute right-2.5 bottom-0.5 bg-[#22A39F] hover:bg-[#22A39F] focus:ring-4 focus:outline-none focus:ring-[#22A39F] font-medium rounded-lg text-sm px-4 py-2 dark:bg-[#22A39F] dark:hover:bg-[#22A39F] dark:focus:ring-[#22A39F]">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end content-start w-full col-span-5 ">
+                            <div class="grid content-center">
+                                <form action="/staffAccount/logout/" method="post" >
+                                    <input hidden name="actionType" value="logout" />
+                                    <button type="submit" class="bg-white h-[50px] text-black w-[150px] rounded-md shadow-lg p-2 font-bold grid justify-center content-center" >
+                                        Log Out
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="flex content-center justify-center">
+                                <div class="grid content-center">
+                                    <img src="{% static 'user1.jpg' %}" class="bg-cover w-[40px] h-[40px] ml-10 rounded-full mr-2 "/>
+                                </div>
+                                <div class="grid content-center">
+                                    <p class="font-bold text-[16px]">Tina Prina</p>
+                                    <p class="font-bold text-gray-400 text-[12px]">Receptionist</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="h-[110px] w-full bg-[#EEEEEE] grid  content-center pl-10">
+                        <div class="grid grid-cols-12 content-start">
+                            <div class="grid content-center justify-start col-span-4">
+                                <!-- Date and time -->
+                                <p class="font-bold text-[24px] text-black" id="date"></p>
+                            </div>
+                            <div class="flex content-center justify-end col-span-8 pr-10">
+                                <div class="grid content-center justify-center">
+                                    <div class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] text-white">
+                                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[20px]"/>
+                                        <p class="ml-3 font-bold">All room</p>
+                                    </div>
+                                </div>
+                                <div class="grid content-center m-5">
+                                    <div class="border-[1px] border-gray-300 h-[30px] place-content-center"></div>
+                                </div>
+                                <div class="grid content-center mr-2">
+                                    <p class="bg-white text-black pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">Daily</p>
+                                </div>
+                                <div class="grid content-center m-5">
+                                    <p class="bg-white text-black pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">Monthly</p>
+                                </div>
+                                <div class="grid content-center mr-5">
+                                    <div class="border-[1px] border-gray-300 h-[30px] place-content-center"></div>
+                                </div>
+                                <div class="grid content-center justify-center">
+                                    <button onclick="location.href='reservation'" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center">
+                                        <img src="{% static 'add.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                        <p  class=" text-white font-bold pl-4">Create new booking</p>
+                                    </button>
+                                </div>
+                            </div>     
+                        </div>  
+                    </div>
+
+                    <div class="grid grid-cols-12 content-start bg-white p-5">
+
+                        <div class="grid col-span-12">
+                            
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                  <tr>
+                                    <th scope="col" class="px-2 py-3  bg-red-200">
+                                        Booking no.
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        First Name
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Middle Name
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Last Name
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        Room Number
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Floor Type
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        CheckIn
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        CheckOut
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        Total
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-200">
+                                        Action
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for x in bookingList %}
+                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ x.bookingNumber }}</td>
+                                        <td class="px-6 py-4">
+                                            {{ x.firstName }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ x.middelName }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ x.lastName }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ x.roomNumber }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ x.roomType }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ x.checkIn }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ x.checkOut }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ x.total }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                              </table>
+                              ​
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+
+</script>

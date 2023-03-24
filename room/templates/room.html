@@ -1,0 +1,742 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Room</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+        <!-- <script>
+            function onLoad(){
+                document.getElementById("add").innerHTML ="false";
+            }
+        </script> -->
+    </head>
+    
+    <body>
+        <div class="grid w-full relative">
+            <!-- add extra form -->
+            <div class="hidden content-start w-[80%] h-screen bg-blue-400 absolute top-[50px] left-[10%] p-5 z-20" id="serviceTypeForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideAddExtraForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Add New Extra Services</h1>
+                    <form method="post" class="grid bg-white" id="extraServicesForm">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="addExtra" hidden />
+                        <input type="text" name="extraServiceTypeValue" id="extraServiceTypeValue" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Service Name" required />
+                        <input type="number" name="extraPrice" id="extraPrice" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Price of service" required />
+                        <input type="submit" value="Submit" class="flex text-white w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center"/>
+                    </form>
+                </div>
+            </div>
+            <!-- add room form -->
+            <div class="hidden content-start w-[80%] h-screen bg-blue-400 absolute top-[50px] left-[10%] p-5 z-20" id="addRoomForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideAddRoomForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Add New Room</h1>
+                    <p id="floorTypeInnerValue" class="uppercase font-bold mb-10"></p>
+                    <form method="post" class="grid bg-white" id="bookingForm">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="addRoom" hidden />
+                        <input type="text" name="price" id="priceValue" hidden />
+                        <input type="text" name="floorType" id="floorTypeValue" hidden />
+                        <input type="text" name="roomNumber" id="roomNumber" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Room Number" required />
+                        <input type="submit" value="Submit" class="flex text-white w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center"/>
+                    </form>
+                </div>
+            </div>
+
+
+
+            <!-- add floor form -->
+            <div class="hidden content-start w-[80%] h-screen bg-blue-400 absolute top-[50px] left-[10%] p-5 z-20" id="addFloorForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideAddFloorForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Add New Floor</h1>
+                    <p id="floorTypeInnerValue" class="uppercase font-bold mb-10"></p>
+                    <form method="post" class="grid bg-white" id="bookingForm">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="addFloor" hidden />
+                        <input type="number" name="price" id="price" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Price" required />
+                        <input type="text" name="floorType" id="floorType" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Floor Type" required />
+                        <input type="submit" value="Submit" class="flex text-white w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center"/>
+                    </form>
+                </div>
+            </div>
+            <!-- edit extra form -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="editExtraFormView">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideEditExtraForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Edit Extra</h1>
+                    <form method="post" class="grid bg-white" for="editExtraForm" id="editExtraForm">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="editExtraForm" hidden />
+                        <input type="text" name="extraId" id="extraIdValue" hidden />
+                        <div class="flex">
+                            <p class="text-black font-bold mt-3 mr-4 text-[24px]">Price : </p>
+                            <input type="text" name="price" id="extraEditPriceValue" class="w-auto text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" />
+                        </div>
+                        <input type="submit" value="Submit" class="flex text-white w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center"/>
+                    </form>
+                </div>
+            </div>
+            <!-- edit floor form -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="editFloorForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideEditFloorForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Edit Floor</h1>
+                    <p id="floorTypeInnerValue" class="uppercase font-bold mb-10"></p>
+                    <form method="post" class="grid bg-white" for="editFloorForm" id="editFloorForm">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="editFloorForm" hidden />
+                        <input type="text" name="floorId" id="floorIdValue" hidden />
+                        <div class="flex">
+                            <p class="text-black font-bold mt-3 mr-4 text-[24px]">Price : </p>
+                            <input type="text" name="price" id="floorPriceEditValue" class="w-auto text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="" />
+                        </div>
+                        <input type="submit" value="Submit" class="flex text-white w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center"/>
+                    </form>
+                </div>
+            </div>
+            <!-- edit room form -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="editRoomForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideEditRoomForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Edit Room</h1>
+                    <p id="floorTypeInnerValue" class="uppercase font-bold mb-10"></p>
+                    <form method="post" class="grid bg-white" for="editRoomForm" id="editRoomForm">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="editRoomFormData" hidden />
+                        <input type="text" name="roomId"id="roomIdValue" hidden />
+                        <div class="flex">
+                            <p class="text-black font-bold mt-3 mr-4 text-[24px]">Room Number : </p>
+                            <input type="text" name="newRoomNumber" id="newRoomNumberValue" class="w-auto text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" required />
+                        </div>
+                        <input type="submit" value="Submit" class="flex text-white w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center"/>
+                    </form>
+                </div>
+            </div>
+
+            <!-- delete room form -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="deleteRoomForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideDeleteRoomForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Delete Room</h1>
+                    <div class="flex text-black text-[24px] w-full">
+                        <span>Are You Sure You Want To Delete Room  </span>
+                        <span id="roomDeleteValue" class="font-bold ml-2 mr-2"></span>
+                        <span>?</span>
+                    </div>
+                    <div class="flex justify-center mt-5 text-white font-bold">
+                        <button class="bg-blue-400 w-[50px] p-2 rounded-md mr-5" onclick="setUserAnswerDeleteRoom(answer='yes')">Yes</button>
+                        <button class="bg-red-600 w-[50px] p-2 rounded-md" onclick="setUserAnswerDeleteRoom(answer='no')">No</button>
+                    </div>
+                    <form method="post" class="grid bg-white" for="deleteRoomFormData" id="deleteRoomFormData">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="deleteRoomFormData" hidden />
+                        <input type="text" name="roomId"  id="deleteRoomIdValue" hidden />
+                        <input hidden type="submit" value="Submit" />
+                    </form>
+                </div>
+            </div>
+
+            <!-- delete extra form -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="deleteExtraForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideDeleteExtraForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Delete Extra Service</h1>
+                    <div class="flex text-black text-[24px] w-full">
+                        <span>Are You Sure You Want To Delete Extra Service  </span>
+                        <span id="serviceTypeeDeleteValue" class="font-bold ml-2 mr-2"></span>
+                        <span>?</span>
+                    </div>
+                    <div class="flex justify-center mt-5 text-white font-bold">
+                        <button class="bg-blue-400 w-[50px] p-2 rounded-md mr-5" onclick="setUserAnswerDeleteExtra(answer='yes')">Yes</button>
+                        <button class="bg-red-600 w-[50px] p-2 rounded-md" onclick="setUserAnswerDeleteExtra(answer='no')">No</button>
+                    </div>
+                    <form method="post" class="grid bg-white" for="deleteExtraFormData" id="deleteExtraFormData">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="deleteExtraFormData" hidden />
+                        <input type="text" name="serviceTypeId"  id="deleteExtraValue" hidden />
+                        <input hidden type="submit" value="Submit" />
+                    </form>
+                </div>
+            </div>
+            <!-- delete floor form -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="deleteFloorForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideDeleteFloorForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Delete Floor</h1>
+                    <div class="flex text-black text-[24px] w-full">
+                        <span>Are You Sure You Want To Delete Floor  </span>
+                        <span id="floorTypeDeleteValue" class="font-bold ml-2 mr-2"></span>
+                        <span>?</span>
+                    </div>
+                    <div class="flex justify-center mt-5 text-white font-bold">
+                        <button class="bg-blue-400 w-[50px] p-2 rounded-md mr-5" onclick="setUserAnswerDeleteFloor(answer='yes')">Yes</button>
+                        <button class="bg-red-600 w-[50px] p-2 rounded-md" onclick="setUserAnswerDeleteFloor(answer='no')">No</button>
+                    </div>
+                    <form method="post" class="grid bg-white" for="deleteFloorFormData" id="deleteFloorFormData">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="deleteFloorFormData" hidden />
+                        <input type="text" name="floorTypeId"  id="deleteFloorValue" hidden />
+                        <input type="text" name="floorType"  id="deleteFloorTypeValue" hidden />
+                        <input hidden type="submit" value="Submit" />
+                    </form>
+                </div>
+            </div>
+
+            <div class="hidden content-start w-[80%] h-screen bg-blue-400 absolute top-[50px] left-[10%] p-5 z-20" id="addRoomForm">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="HideAddRoomForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md p-10 mt-10">
+                    <h1 class="text-center font-bold mb-10">Add New Room</h1>
+                    <p id="floorTypeInnerValue" class="uppercase font-bold mb-10"></p>
+                    <form method="post" class="grid bg-white" id="bookingForm">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="addRoom" hidden />
+                        <input type="text" name="price" id="priceValue" hidden />
+                        <input type="text" name="floorType" id="floorTypeValue"  hidden />
+                        <input type="text" name="roomNumber" id="roomNumber" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Room Number" required />
+                        <input type="submit" value="post" class="flex w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center"/>
+                    </form>
+                </div>
+            </div>
+
+            <div class="grid min-[1030px]:grid-cols-12 min-h-screen relative">
+                <!-- Side bar starts here small screen -->
+                <div class="hidden w-[70%] min-h-screen fixed z-50 top-0 content-start bg-[#EEEEEE] shadow-md" id="sidebarlistmobile">
+                    <div class="flex w-full justify-end">
+                        <button onclick="showHideMenu()" class="bg-[#EEEEEE] min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'close.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                    </div>
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                        href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+
+                <!-- Side bar starts here -->
+                <div class="hidden min-[1030px]:grid col-span-2 content-start bg-[#EEEEEE] shadow-md" id="sidebarlist">
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                        href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <div class="grid content-start min-[1030px]:col-span-10 bg-white">
+                    <div class="max-[1030px]:flex hidden">
+                        <button onclick="showSideMenu()" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'menu.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                        <p class="font-bold text-[30px] mb-2 text-gray-400 ml-5">Room</p>
+                    </div>
+                    <div class="grid min-[1030px]:grid-cols-12 min-[1030px]:justify-end min-[1030px]:content-start bg-[#EEEEEE] w-full pt-5 pr-10  pl-10">
+                        <div class="flex content-center min-[1030px]:col-span-7 ">
+                            <div class="grid content-center w-full">
+                                <div class="hidden min-[1030px]:flex content-center justify-center mt-5 w-full">
+                                    <p class="font-bold text-[30px] mb-2 text-gray-400 mr-5">Room</p>
+                                    <div class="flex content-center justify-center w-full">
+
+                                    </div>
+                                </div>
+                                <div class="grid min-[1030px]:content-center justify-start min-[1030px]:col-span-4">
+                                    <!-- Date and time -->
+                                    <p class="font-bold text-[24px] text-black" id="date"></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="grid min-[1030px]:flex min-[1030px]:justify-end min-[1030px]:content-start w-full min-[1030px]:col-span-5 ">
+                            <div class="grid content-center max-[1030px]:m-5">
+                                <form action="/staffAccount/logout/" method="post" >
+                                    <input hidden name="actionType" value="logout" />
+                                    <button type="submit" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                        Log Out
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="flex min-[1030px]:content-center min-[1030px]:justify-center max-[1030px]:mb-5">
+                                <div class="grid content-center">
+                                    <img src="{% static 'userPic.png' %}" class="bg-cover w-[40px] h-[40px] min-[1030px]:ml-10 rounded-full mr-2 "/>
+                                </div>
+                                <div class="grid content-center">
+                                    <p class="font-bold text-[16px] capitalize">{{staffName}}</p>
+                                    <p class="font-bold text-gray-400 text-[12px] capitalize">{{userTitle}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex w-full justify-end bg-[#EEEEEE]">
+                        <div class="grid content-center justify-end bg-[#EEEEEE] pr-5 pb-5">
+                            {% if userTitle == 'manager' %}
+                                <button onclick="ShowAddExtraForm(serviceType='{{ extra.serviceType }}',price='{{ extra.price }}')" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center">
+                                    <img src="{% static 'add.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                    <p  class=" text-white font-bold pl-4">Add New extraServices</p>
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div class="grid content-center justify-end bg-[#EEEEEE] pr-5 pb-5">
+                            {% if userTitle == 'manager' %}
+                                <button onclick="ShowAddFloorForm()" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center">
+                                    <img src="{% static 'add.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                    <p  class=" text-white font-bold pl-4">Add New Floor</p>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="grid bg-white min-[1030px]:p-10">
+                        <div class="grid w-full mb-10">
+                            <div class="grid grid-cols-12 content-center justify-start mb-5">
+                                <div class="grid col-span-6 content-center justify-start">
+                                    <h1 class="text-black uppercase font-bold">
+                                        Extra Services
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap justify-start content-start">
+                                {% for extra in extraServices %}
+                                <div class="grid w-[210px] justify-center content-center  m-5">
+                                    <div class="grid w-[150px] h-[130px] bg-white border-[0.5px] border-gray-400 p-5 relative mb-2 ml-5">
+                                            <p>{{ extra.serviceType }}</p>
+                                            <p>${{ extra.price }} per day</p>
+                                        </div>
+                                        <div class="flex">
+                                            <div class="grid content-center justify-center">
+                                                {% if userTitle == 'manager' %}
+                                                <button onclick="ShowEditExtraForm( price='{{extra.price}}', id='{{ extra.id }}' )" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-blue-600 justify-center content-center">
+                                                    <img src="{% static 'edit.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                                    <p  class=" text-white font-bold pl-4">Edit</p>
+                                                </button>
+                                                {% endif %}
+                                            </div>
+                                            <div class="grid content-center justify-center ml-1">
+                                                {% if userTitle == 'manager' %}
+                                                    <button onclick="ShowDeleteExtraForm(serviceType='{{ extra.serviceType }}',id='{{ extra.id }}')" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-red-600 justify-center content-center">
+                                                        <img src="{% static 'delete.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                                        <p  class=" text-white font-bold pl-4">Delete</p>
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% for floor in floors %}
+                            <div class="grid w-full mb-10">
+                                <div class="grid max-[1030px]:grid-cols-12 max-[1030px]:content-center max-[1030px]:justify-start mb-5">
+                                    <div class="grid max-[1030px]:col-span-6 content-center justify-start">
+                                        <h1 class="text-black uppercase font-bold">
+                                            {{ floor.floorType }}
+                                        </h1>
+                                    </div>
+                                    <div class="grid min-[1030px]:flex  min-[1030px]:col-span-6 min-[1030px]:content-center min-[1030px]:justify-end">
+                                        <div class="grid content-center justify-center ml-10 mr-5">
+                                            {% if userTitle == 'manager' %}
+                                                <button onclick="ShowAddRoomForm(floor='{{ floor.floorType }}',price='{{ floor.price }}')" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center">
+                                                    <img src="{% static 'add.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                                    <p  class=" text-white font-bold pl-4">Add New Room</p>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                        <div class="grid content-center justify-center">
+                                            {% if userTitle == 'manager' %}
+                                                <button onclick="ShowEditFloorForm(floor='{{ floor.floorType }}',price='{{ floor.price }}' , id='{{ floor.id }}')" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-blue-600 justify-center content-center">
+                                                    <img src="{% static 'edit.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                                    <p  class=" text-white font-bold pl-4">Edit</p>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                        <div class="grid content-center justify-center ml-5">
+                                            {% if userTitle == 'manager' %}
+                                                <button onclick="ShowDeleteFloorForm(floor='{{ floor.floorType }}',id='{{ floor.id }}')" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-red-600 justify-center content-center">
+                                                    <img src="{% static 'delete.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                                    <p  class=" text-white font-bold pl-4">Delete</p>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap justify-start content-start">
+                                    {% for room in rooms %}
+                                        {% if room.floorType == floor.floorType %}
+                                            <div class="grid w-[210px] justify-center content-center  m-5">
+                                                <div class="grid w-[150px] h-[130px] bg-white border-[0.5px] border-gray-400 p-5 relative mb-2 ml-5">
+                                                    <!-- <p>{{room.roomNumber}}</p> -->
+                                                    {% if room.booking == 'booked' %}
+                                                        <div class="grid w-full h-[30px] bg-blue-500 justify-center content-center  text-white font-bold">
+                                                            <p>Booked</p>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if room.booking != 'booked' %}
+                                                        <div class="grid w-full h-[30px] bg-orange-500 justify-center content-center  text-white font-bold">
+                                                            <p>Available</p>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if room.clean == 'dirty' %}
+                                                    <div class="grid w-full h-[30px] bg-red-500 justify-center content-center  text-white font-bold">
+                                                        <p>Dirty</p>
+                                                    </div>
+                                                    {% endif %}
+                                                    {% if room.clean == 'clean' %}
+                                                    <div class="grid w-full h-[30px] bg-pink-500 justify-center content-center  text-white font-bold">
+                                                        <p>Clean</p>
+                                                    </div>
+                                                    {% endif %}
+                                                    <div class="flex justify-center content-center bg-red-600 w-[30px] text-white absolute top-[-10px]">
+                                                        <p>{{room.roomNumber}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex">
+                                                    <div class="grid content-center justify-center">
+                                                        {% if userTitle == 'manager' %}
+                                                        <button onclick="ShowEditRoomForm(currentRoomNumber='{{ room.roomNumber }}' , id='{{room.id}}')" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-blue-600 justify-center content-center">
+                                                            <img src="{% static 'edit.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                                            <p  class=" text-white font-bold pl-4">Edit</p>
+                                                        </button>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="grid content-center justify-center ml-1">
+                                                        {% if userTitle == 'manager' %}
+                                                            <button onclick="ShowDeleteRoomForm(room='{{ room.roomNumber }}',id='{{ room.id }}')" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-red-600 justify-center content-center">
+                                                                <img src="{% static 'delete.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                                                <p  class=" text-white font-bold pl-4">Delete</p>
+                                                            </button>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif%}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    const d = new Date();
+    document.getElementById("date").innerHTML = d.toDateString();
+
+    function HideAddExtraForm(){
+        enableScrolling()
+        document.getElementById("serviceTypeForm").style.display = 'none';
+    }
+    function HideAddRoomForm(){
+        enableScrolling()
+        document.getElementById("addRoomForm").style.display = 'none';
+    }
+
+    function HideAddFloorForm(){
+        enableScrolling()
+        document.getElementById("addFloorForm").style.display = 'none';
+    }
+      
+    function HideEditExtraForm(){
+        enableScrolling()
+        document.getElementById("editExtraFormView").style.display = 'none';
+    }
+    function HideEditFloorForm(){
+        enableScrolling()
+        document.getElementById("editFloorForm").style.display = 'none';
+    }
+
+    function HideEditRoomForm(){
+        enableScrolling()
+        document.getElementById("editRoomForm").style.display = 'none';
+    }
+      
+    function HideDeleteExtraForm(){
+        enableScrolling()
+        document.getElementById("deleteExtraForm").style.display = 'none';
+    }
+    function HideDeleteFloorForm(){
+        enableScrolling()
+        document.getElementById("deleteFloorForm").style.display = 'none';
+    }
+
+    function HideDeleteRoomForm(){
+        enableScrolling()
+        document.getElementById("deleteRoomForm").style.display = 'none';
+    }
+
+    function ShowAddExtraForm(){
+        disableScrolling()
+        document.getElementById("serviceTypeForm").style.display = 'grid';
+    }
+    function ShowAddRoomForm(floor,price){
+        disableScrolling()
+        var floorTypeInput = document.getElementById("floorTypeValue");
+        floorTypeInput.value = floor;
+
+        var priceValueInput = document.getElementById("priceValue");
+        priceValueInput.value = price;
+        
+        document.getElementById("floorTypeInnerValue").innerHTML =floor;
+
+        document.getElementById("addRoomForm").style.display = 'grid';
+    }
+
+    function ShowAddFloorForm(){
+        disableScrolling()
+        document.getElementById("addFloorForm").style.display = 'grid';
+    }
+
+    function ShowEditExtraForm(price,id){
+        disableScrolling()
+        var priceValueInput = document.getElementById("extraEditPriceValue");
+        priceValueInput.value = price;
+
+        var serviceTypeId = document.getElementById("extraIdValue");
+        serviceTypeId.value = id;
+
+        document.getElementById("editExtraFormView").style.display = 'grid';
+    }
+    
+    function ShowEditFloorForm(floor,price,id){
+        disableScrolling()
+        var priceValueInput = document.getElementById("floorPriceEditValue");
+        priceValueInput.value = price;
+
+        var floorIdInput = document.getElementById("floorIdValue");
+        floorIdInput.value = id;
+
+        document.getElementById("editFloorForm").style.display = 'grid';
+    }
+    
+    function ShowEditRoomForm(currentRoomNumber,id){
+        disableScrolling()
+        var roomIdInput = document.getElementById("roomIdValue");
+        roomIdInput.value = id;
+        var roomNumberInput = document.getElementById("newRoomNumberValue");
+        roomNumberInput.value = currentRoomNumber;
+
+        document.getElementById("editRoomForm").style.display = 'grid';
+    }
+
+    function ShowDeleteExtraForm(serviceType,id){
+        disableScrolling()
+        document.getElementById("serviceTypeeDeleteValue").innerHTML =serviceType;
+        var serviceTypeInput = document.getElementById("deleteExtraValue");
+        serviceTypeInput.value = id;
+        document.getElementById("deleteExtraForm").style.display = 'grid';
+    }
+    
+    function ShowDeleteFloorForm(floor,id){
+        disableScrolling()
+        document.getElementById("floorTypeDeleteValue").innerHTML =floor;
+        var floorTypeInput = document.getElementById("deleteFloorValue");
+        floorTypeInput.value = id;
+        var floorTypeInputType = document.getElementById("deleteFloorTypeValue");
+        floorTypeInputType.value = floor;
+        document.getElementById("deleteFloorForm").style.display = 'grid';
+    }
+
+    function ShowDeleteRoomForm(room,id){
+        disableScrolling()
+        document.getElementById("roomDeleteValue").innerHTML =room;
+        var roomInput = document.getElementById("deleteRoomIdValue");
+        roomInput.value = id;
+
+        document.getElementById("deleteRoomForm").style.display = 'grid';
+    }
+
+    function setUserAnswerDeleteExtra(answer){
+        if(answer === 'yes'){
+            document.getElementById("deleteExtraFormData").submit();
+        }else{
+            HideDeleteExtraForm()
+        }
+    }
+    function setUserAnswerDeleteFloor(answer){
+        if(answer === 'yes'){
+            document.getElementById("deleteFloorFormData").submit();
+        }else{
+            HideDeleteFloorForm()
+        }
+    }
+
+    function setUserAnswerDeleteRoom(answer){
+        if(answer === 'yes'){
+            document.getElementById("deleteRoomFormData").submit();
+        }else{
+            HideDeleteRoomForm()
+        }
+    }
+
+    function disableScrolling() {
+        TopScroll =0;
+        LeftScroll =0,
+        window.scrollTo(LeftScroll, TopScroll);
+        window.onscroll = function() {
+            window.scrollTo(LeftScroll, TopScroll);
+        };
+    }
+        
+    function enableScrolling() {
+    window.onscroll = function() {};
+    }
+    function showHideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+        document.getElementById("sidebarlistmobile").classList.add('hidden')
+    }
+    function showSideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('hidden')
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+    }
+</script>

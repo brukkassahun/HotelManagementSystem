@@ -1,0 +1,479 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>stuff</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+        <!-- <script>
+            function onLoad(){
+                document.getElementById("add").innerHTML ="false";
+            }
+        </script> -->
+    </head>
+    
+    <body>
+        <div class="grid w-full relative">
+            <!-- add stuff form -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] min-h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="stufFormView">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="hideStufForm()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-5">
+                    <h1 class="text-center font-bold mb-5">Add New Stuff Memeber</h1>
+                    <form method="post" for="addMember" id="addMember" class="p-10">
+                        {% csrf_token %}
+                        <input type="text" name="formType" value="addMember" hidden />
+                        <div class="mb-4">
+                          <label class="block text-gray-700 text-sm font-bold mb-2" for="firstName">
+                            First Name
+                          </label>
+                          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="firstName" id="firstName" type="text" placeholder="First name" required>
+                        </div>
+                        <div class="mb-4">
+                          <label class="block text-gray-700 text-sm font-bold mb-2" for="lastName">
+                            Last Name
+                          </label>
+                          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="lastName" id="lastName" type="text" placeholder="Last name" required>
+                        </div>
+                        <div class="mb-4">
+                          <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                            Email
+                          </label>
+                          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="email" id="email" type="email" placeholder="Email" required>
+                        </div>
+                        <div class="mb-4">
+                          <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                            Password
+                          </label>
+                          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="password" id="password" type="password" placeholder="Password" required>
+                        </div>
+                        <div class="mb-4">
+                          <label class="block text-gray-700 text-sm font-bold mb-2" for="employeeTitle">
+                            Employee Title
+                          </label>
+                          <input name="employeeTitle" value="" id="employeeTitle" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                          <select onchange="getSelectedEmployeeTitle()" id="employeeTitleValue" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected >-------</option>
+                            <option value="receptionist">Receptionist</option>
+                            <option value="cleaner">Cleaner</option>
+                            <option value="manager">Manager</option>
+                          </select>
+                        </div>
+                        <input name="userId" value="" id="userId" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                        <div class="grid justify-center">
+                            <button type="submit"  class="flex text-white w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="grid min-[1030px]:grid-cols-12 min-h-screen relative">
+
+                <!-- Side small screen bar starts here -->
+                <div class="hidden w-[250px] min-h-screen fixed z-50 top-0 content-start bg-[#EEEEEE] shadow-md" id="sidebarlistmobile">
+                    <div class="flex w-full justify-end">
+                        <button onclick="showHideMenu()" class="bg-[#EEEEEE] min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'close.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                    </div>
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    <a 
+                    class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                    href='/stuff/stuff'
+                >
+                    <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                    <p class="font-bold ml-3 pt-1 text-white">Stuff</p>
+                </a>
+                </div> 
+                <!-- Side bar ends here -->
+                <!-- Side bar starts here -->
+                <div class="hidden min-[1030px]:grid col-span-2 content-start bg-[#EEEEEE] shadow-md" id="sidebarlist">
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    <a 
+                    class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                    href='/stuff/stuff'
+                >
+                    <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                    <p class="font-bold ml-3 pt-1 text-white">Stuff</p>
+                </a>
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <div class="grid content-start min-[1030px]:col-span-10 bg-white">
+                        <div class="max-[1030px]:flex hidden">
+                            <button onclick="showSideMenu()" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                <img src="{% static 'menu.png' %}" class="w-[40px] h-[40px]" />
+                            </button>
+                            <p class="font-bold text-[30px] mb-2 text-gray-400 ml-5">Stuff</p>
+                        </div>
+                        <div class="grid min-[1030px]:grid-cols-12 min-[1030px]:justify-end min-[1030px]:content-start bg-[#EEEEEE] w-full pt-5 min-[1030px]:pr-10 min-[1030px]:pl-10 ">
+                            <div class="flex content-center min-[1030px]:col-span-7 ">
+                                <div class="grid min-[1030px]:content-center w-full">
+                                    <div class="hidden min-[1030px]:flex content-center justify-center mt-5 w-full">
+                                        <p class="font-bold text-[30px] mb-2 text-gray-400 mr-5">Stuff</p>
+                                        <div class="flex content-center justify-center w-full">
+                                            <div class="grid w-full content-center">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid content-center justify-start col-span-2">
+                                        <!-- Date and time -->
+                                        <p class="font-bold text-[24px] text-black" id="date"></p>
+                                    </div>                                
+                                </div>
+                            </div>  
+
+                            <div class="flex max-[1030px]:flex-wrap min-[1030px]:justify-end min-[1030px]:content-start w-full min-[1030px]:col-span-5 ">
+                                    <div class="grid min-[1030px]:content-center max-[1030px]:m-5">
+                                      <form action="/staffAccount/logout/" method="post" >
+                                        <input hidden name="actionType" value="logout" />
+                                        <button type="submit" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                            Log Out
+                                        </button>
+                                      </form>
+                                    </div>
+                                    <div class="flex content-center justify-center">
+                                        <div class="grid content-center">
+                                            <img src="{% static 'userPic.png' %}" class="bg-cover w-[40px] h-[40px] ml-10 rounded-full mr-2 "/>
+                                        </div>
+                                        <div class="grid content-center">
+                                            <p class="font-bold text-[16px] capitalize">{{staffName}}</p>
+                                            <p class="font-bold text-gray-400 text-[12px] capitalize">{{userTitle}}</p>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class=" flex justify-end w-full p-5 bg-[#EEEEEE]">
+                            <div class="grid content-center justify-center">
+                                {% if userTitle == 'manager' %}
+                                    <button onclick="showStufForm()" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center">
+                                        <img src="{% static 'add.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                        <p  class=" text-white font-bold pl-4">Add New Stuff Member</p>
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    
+                    <div class="grid bg-white">
+                        {% for x in stuff %}
+                        <div class="w-full grid min-[1030px]:hidden justify-center content-center mb-5 p-1 rounded-sm shadow-sm bg-gray-300">
+                            <div class="grid p-2 ">
+                                <p class="font-bold text-black bg-red-200 p-2">Stuff Id : {{ x.stufId }}   </p>
+                                <p class="font-bold text-black bg-red-300 p-2"> Firs Name : {{ x.firstName }} </p>
+                                <p class="font-bold text-black bg-red-200 p-2"> Last Name :  {{ x.lastName }} </p>
+                                <p class="font-bold text-black bg-red-300 p-2">Emaile : {{ x.email }}</p>
+                                <p class="font-bold text-black bg-red-200 p-2">Employee Titlee :  $ {{ x.title }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div>
+                            <p class="text-black font-bold">No result!</p>
+                        </div>
+                        {% endfor %}
+                        <table class="max-[1030px]:hidden w-full text-sm text-left text-gray-500 dark:text-gray-400 font-bold">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                              <tr class="font-extrabold">
+                                <th scope="col" class="px-2 py-3 bg-red-300">
+                                    Stuff Id
+                                </th>
+                                <th scope="col" class="px-2 py-3 bg-red-200">
+                                    Firs Name
+                                </th>
+                                <th scope="col" class="px-2 py-3 bg-red-300">
+                                    Last Name
+                                </th>
+                                <th scope="col" class="px-2 py-3 bg-red-200">
+                                    Email
+                                </th>
+                                <th scope="col" class="px-2 py-3 bg-red-300">
+                                    Employee Title
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for x in stuff %}
+                                <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                                    <td class="px-6 py-4">
+                                        {{ x.stufId }}  
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ x.firstName }}  
+                                    </td>
+                                    <td class="px-6 py-4">
+                                       {{ x.lastName }} 
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ x.email }} 
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ x.title }} 
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td class="text-black font-bold">No result!</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    const d = new Date();
+    document.getElementById("date").innerHTML = d.toDateString();
+
+    function HideAddRoomForm(){
+        enableScrolling()
+        document.getElementById("addRoomForm").style.display = 'none';
+    }
+
+    function HideAddFloorForm(){
+        enableScrolling()
+        document.getElementById("addFloorForm").style.display = 'none';
+    }
+      
+    function HideEditFloorForm(){
+        enableScrolling()
+        document.getElementById("editFloorForm").style.display = 'none';
+    }
+
+    function HideEditRoomForm(){
+        enableScrolling()
+        document.getElementById("editRoomForm").style.display = 'none';
+    }
+      
+    function HideDeleteFloorForm(){
+        enableScrolling()
+        document.getElementById("deleteFloorForm").style.display = 'none';
+    }
+
+    function HideDeleteRoomForm(){
+        enableScrolling()
+        document.getElementById("deleteRoomForm").style.display = 'none';
+    }
+
+    function ShowAddRoomForm(floor,price){
+        disableScrolling()
+        var floorTypeInput = document.getElementById("floorTypeValue");
+        floorTypeInput.value = floor;
+
+        var priceValueInput = document.getElementById("priceValue");
+        priceValueInput.value = price;
+        
+        document.getElementById("floorTypeInnerValue").innerHTML =floor;
+
+        document.getElementById("addRoomForm").style.display = 'grid';
+    }
+
+    function ShowAddFloorForm(){
+        disableScrolling()
+        document.getElementById("addFloorForm").style.display = 'grid';
+    }
+
+    function ShowEditFloorForm(floor,price,id){
+        disableScrolling()
+        var priceValueInput = document.getElementById("floorPriceEditValue");
+        priceValueInput.value = price;
+
+        var floorIdInput = document.getElementById("floorIdValue");
+        floorIdInput.value = id;
+
+        document.getElementById("editFloorForm").style.display = 'grid';
+    }
+    
+    function ShowEditRoomForm(currentRoomNumber,id){
+        disableScrolling()
+        var roomIdInput = document.getElementById("roomIdValue");
+        roomIdInput.value = id;
+        var roomNumberInput = document.getElementById("newRoomNumberValue");
+        roomNumberInput.value = currentRoomNumber;
+
+        document.getElementById("editRoomForm").style.display = 'grid';
+    }
+
+    function ShowDeleteFloorForm(floor,id){
+        disableScrolling()
+        document.getElementById("floorTypeDeleteValue").innerHTML =floor;
+        var floorTypeInput = document.getElementById("deleteFloorValue");
+        floorTypeInput.value = id;
+        var floorTypeInputType = document.getElementById("deleteFloorTypeValue");
+        floorTypeInputType.value = floor;
+        document.getElementById("deleteFloorForm").style.display = 'grid';
+    }
+
+    function ShowDeleteRoomForm(room,id){
+        disableScrolling()
+        document.getElementById("roomDeleteValue").innerHTML =room;
+        var roomInput = document.getElementById("deleteRoomIdValue");
+        roomInput.value = id;
+
+        document.getElementById("deleteRoomForm").style.display = 'grid';
+    }
+
+    function setUserAnswerDeleteFloor(answer){
+        if(answer === 'yes'){
+            document.getElementById("deleteFloorFormData").submit();
+        }else{
+            HideDeleteFloorForm()
+        }
+    }
+
+    function setUserAnswerDeleteRoom(answer){
+        if(answer === 'yes'){
+            document.getElementById("deleteRoomFormData").submit();
+        }else{
+            HideDeleteRoomForm()
+        }
+    }
+
+    function disableScrolling() {
+        TopScroll =0;
+        LeftScroll =0,
+        window.scrollTo(LeftScroll, TopScroll);
+        window.onscroll = function() {
+            window.scrollTo(LeftScroll, TopScroll);
+        };
+    }
+        
+    function enableScrolling() {
+    window.onscroll = function() {};
+    }
+
+    let yr = d.getFullYear();
+    let mnt = d.getMonth()
+    let dy = d.getDay()
+    let hrs = d.getHours()
+    let mns = d.getMinutes()
+    let sec = d.getMilliseconds()
+    var userId_input = document.getElementById("userId");
+    userIdValue=yr+''+mnt+''+dy+''+hrs+''+mns+''+sec;
+    userId_input.value = userIdValue.toString();
+
+    function showStufForm(){
+        document.getElementById("stufFormView").classList.remove('hidden')
+        document.getElementById("stufFormView").classList.add('grid')
+    }
+    function hideStufForm(){
+        document.getElementById("stufFormView").classList.remove('grid')
+        document.getElementById("stufFormView").classList.add('hidden')
+    }
+    function getSelectedEmployeeTitle(){
+        var e = document.getElementById("employeeTitleValue");
+        var title = e.options[e.selectedIndex].text;
+
+        var titleInput = document.getElementById("employeeTitle");
+        titleInput.value = title;
+    }
+        function showHideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+        document.getElementById("sidebarlistmobile").classList.add('hidden')
+    }
+    function showSideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('hidden')
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+    }
+</script>

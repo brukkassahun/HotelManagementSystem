@@ -1,0 +1,1116 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Booked</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+        <!-- <script>
+            function onLoad(){
+                document.getElementById("add").innerHTML ="false";
+            }
+        </script> -->
+    </head>
+    
+    <body>
+        <div class="grid w-full">
+             <!-- Payment -->
+             <div class="hidden content-start w-[80%] h-[400px] bg-blue-400 absolute top-[50px] left-[10%] p-5 z-20" id="payBoooked">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="hidePay()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <h1 class="text-center font-bold mb-5">Payment</h1>
+                <div class="bg-white p-10 grid content-center justify-center">
+                    <div class="flex justify-start text-[24px]">
+                        <P class="text-black font-bold mr-2">The total payment is </P>
+                        <P class="text-black font-bold" id="payTotalVal"></P>
+                    </div>
+                    <div class="flex justify-start text-[24px]">
+                        <P class="text-black font-bold mr-2">Do you want to Make the payment now?</P>
+                    </div>
+                    <div class="flex justify-center mt-5 text-white font-bold">
+                        <form method="post" for="bookedPayment" id="bookedPayment">
+                            {% csrf_token %}
+                            <input type="text" name="formFor" value="bookedPayment" hidden />
+                            <input name="BookedId" id="BookedIdVal" />
+                            <button type="submit" class="bg-blue-400 w-[50px] p-2 rounded-md mr-5" >Pay</button>
+                        </form>
+                        <button class="bg-red-600 w-[60px] p-2 rounded-md" onclick="setUserAnswer(answer='no')">Cancel</button>
+                    </div>
+                </div>
+             </div>
+
+            <!-- View invoice detail -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] min-h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] p-5 z-20" id="invoiceDetail">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="hideInvoice()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md p-10 mt-5">
+                    <h1 class="text-center font-bold mb-5">Invoice</h1>
+                    <div class="grid grid-cols-2 font-bold text-white">
+                        <div class="bg-gray-400">
+                            <p>Hotel Name</p>
+                        </div>
+                        <div class="bg-gray-500">
+                            <p>Due<br> $0000.0</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 min-[1030px]:grid-cols-3 font-bold text-black p-2">
+                        <div class="max-[1030px]:hidden"></div>
+                        <div class="bg-gray-100">
+                            <p class="border-b-2 border-black p-2">First Name:</p>
+                            <p class="border-b-2 border-black p-2">Middle Name:</p>
+                            <p class="border-b-2 border-black p-2">Last Name  :</p>
+                            <p class="border-b-2 border-black p-2">Address  :</p>
+                        </div>
+                        <div class="bg-gray-200">
+                            <P class="border-b-2 border-black p-2" id="firstNameValInvoice"></P>
+                            <P class="border-b-2 border-black p-2" id="middleNameValInvoice"></P>
+                            <P class="border-b-2 border-black p-2" id="lastNameValInvoice"></P>
+                            <P class="border-b-2 border-black p-2" id="addressValInvoice"></P>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2  text-black p-2 bg-green-300 ">
+                        <div class="bg-gray-100 p-2">
+                            <h1 class="font-bold">Item</h1>
+                            <P class="font-bold" id="floorTypeValInvoice"></P>
+                            <P class="font-bold" id="extraServicesValInvoice"></P>
+                        </div>
+                        <div class="bg-gray-500 text-white p-2">
+                            <h1 class="font-bold">Total</h1>
+                            $<span class="font-bold" id="roomValinvoice"></span><br/>
+                            $<span class="font-bold" id="extrainvoiceval"></span>
+                        </div>
+                    </div>
+                    <div class="font-bold bg-black text-white p-10">
+                       Sub Total :$ <span class="font-bold" id="totalValInvoice"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- View Booked detail -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] min-h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="viewBookedDetail">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="hideView()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-5">
+                    <h1 class="text-center font-bold mb-5">Reservation Information</h1>
+                    <div class="grid grid-cols-2" id="bookedList">
+                        <div class="border-2 border-black">
+                            <P class="border-b-2 border-black p-2">Booking Number </P>
+                            <P class="border-b-2 border-black p-2">First Name</P>
+                            <P class="border-b-2 border-black p-2">Middle Name</P>
+                            <P class="border-b-2 border-black p-2">Last Name</P>
+                            <P class="border-b-2 border-black p-2">Contact Number</P>
+                            <P class="border-b-2 border-black p-2">Email</P>
+                            <P class="border-b-2 border-black p-2">Address</P>
+                            <P class="border-b-2 border-black p-2">Id Card Type</P>
+                            <P class="border-b-2 border-black p-2">Card Number</P>
+                            <P class="border-b-2 border-black p-2">Room Number</P>
+                            <P class="border-b-2 border-black p-2">Floor Type</P>
+                            <P class="border-b-2 border-black p-2">Check In</P>
+                            <P class="border-b-2 border-black p-2">Check Out</P>
+                            <P class="border-b-2 border-black p-2">Payment Status</P>
+                            <P class="border-b-2 border-black p-2">Extra Services</P>
+                            <P class="p-2">Total</P>
+                        </div>
+                        <div class="border-t-2 border-b-2 border-r-2  border-black">
+                            <P class="border-b-2 border-black p-2" id="bookingNumberVal"></P>
+                            <P class="border-b-2 border-black p-2" id="firstNameVal"></P>
+                            <P class="border-b-2 border-black p-2" id="middleNameVal"></P>
+                            <P class="border-b-2 border-black p-2" id="lastNameVal"></P>
+                            <P class="border-b-2 border-black p-2" id="contactNumberVal"></P>
+                            <P class="border-b-2 border-black p-2" id="emailVal"></P>
+                            <P class="border-b-2 border-black p-2" id="addressVal"></P>
+                            <P class="border-b-2 border-black p-2" id="idCardTypeVal"></P>
+                            <P class="border-b-2 border-black p-2" id="idCardNumberVal"></P>
+                            <P class="border-b-2 border-black p-2" id="roomNumberVal"></P>
+                            <P class="border-b-2 border-black p-2" id="floorTypeVal"></P>
+                            <P class="border-b-2 border-black p-2" id="checkInVal"></P>
+                            <P class="border-b-2 border-black p-2" id="checkOutVal"></P>
+                            <P class="border-b-2 border-black p-2" id="paymentStatusVal"></P>
+                            <P class="border-b-2 border-black p-2" id="extraServicesVal"></P>
+                            <P class="p-2" id="totalVal"></P>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- edit Booked detail -->
+            <div class="hidden content-start w-full min-[1030px]:w-[80%] min-h-screen bg-blue-400 absolute min-[1030px]:top-[50px] min-[1030px]:left-[10%] min-[1030px]:p-5 z-20" id="editBookedDetail">
+                <div class="w-full flex content-start justify-end">
+                    <button onclick="hideEdit()">
+                        <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                    </button>
+                </div>
+                <div class="bg-white w-full z-20 rounded-md min-[1030px]:p-10 mt-5">
+                    <h1 class="text-center font-bold mb-5">Reservation Information</h1>
+                    <form method="post" for="bookedEdit" id="bookedEdit">
+                        {% csrf_token %}
+                        <input type="text" name="formFor" value="bookedEdit" hidden />
+                        <div class="grid grid-cols-2" id="bookedList">
+                            <div class="border-2 border-black">
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Booking Number </P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">First Name</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Middle Name</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Last Name</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Contact Number</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Email</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Address</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Id Card Type</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2"> Card Number</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Room Number</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Floor Type</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Check In</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Check Out</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Payment Status</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2">Extra Services</P>
+                                <P class="mt-2 border-2 min-[1030px]:ml-2 min-[1030px]:mr-2 min-[1030px]:border-black p-2 mb-2" hidden>Total</P>
+                            </div>
+                            <div class="grid border-t-2 border-b-2 border-r-2  border-black">
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputbookingNumberVal" id="inputbookingNumberVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputfirstNameVal" id="inputfirstNameVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputmiddleNameVal" id="inputmiddleNameVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputlastNameVal" id="inputlastNameVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputcontactNumberVal" id="inputcontactNumberVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputemailVal" id="inputemailVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputaddressVal" id="inputaddressVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputidCardTypeVal" id="inputidCardTypeVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputidCardNumberVal" id="inputidCardNumberVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputroomNumberVal" id="inputroomNumberVal"></input>
+                                <input hidden class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2"   name="inputroomNumberOriginalVal" id="inputroomNumberOriginalVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputfloorTypeVal" id="inputfloorTypeVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" type="date" name="inputcheckInVal" id="inputcheckInVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" type="date" name="inputcheckOutVal" id="inputcheckOutVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputpaymentStatusVal" id="inputpaymentStatusVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 border-green-600 border-2  p-2" name="inputextraServicesVal" id="inputextraServicesVal"></input>
+                                <input required class="mt-2 ml-2 mr-2 mb-2 border-green-600 border-2  p-2" name="inputtotalVal" id="inputtotalVal" hidden></input>
+                            </div>
+                        </div>
+                        <div class="grid justify-center">
+                            <input class="hidden" name="inputbookingIdVal" id="inputbookingIdVal"/>
+                            <button type="submit"  class="flex text-white w-[100px] mt-10 pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Delete Booked -->
+            <div class="hidden content-start w-[80%] h-[400px] bg-blue-400 absolute top-[50px] left-[10%] p-5 z-20" id="deleteBoooked">
+               <div class="w-full flex content-start justify-end">
+                   <button onclick="hideDelete()">
+                       <img src="{% static 'close.png' %}" class="bg-cover w-[40px] h-[40px] justify-center content-center"/>
+                   </button>
+               </div>
+               <h1 class="text-center font-bold mb-5">Delete</h1>
+               <div class="bg-white p-10 grid content-center justify-center">
+                   <div class="flex justify-start text-[24px]">
+                       <P class="text-black font-bold mr-2">Are you sure you want to delete current reservation?</P>
+                   </div>
+                   <div class="flex justify-center mt-5 text-white font-bold">
+                       <form method="post" for="deleteBookingForm" id="deleteBookingForm">
+                           {% csrf_token %}
+                           <input type="text" name="formFor" value="deleteBooking" hidden />
+                           <input name="deleteIdVal" id="deleteIdVal" hidden/>
+                           <input name="deleteRoomNumberVal" id="deleteRoomNumberVal" hidden />
+                           <button type="submit" class="bg-blue-400 w-[50px] p-2 rounded-md mr-5" >Yes</button>
+                       </form>
+                       <button class="bg-red-600 w-[60px] p-2 rounded-md" onclick="hideDelete()">No</button>
+                   </div>
+               </div>
+            </div>
+
+            <div class="grid min-[1030px]:grid-cols-12 min-h-screen relative">
+
+                <!-- Side bar starts here small screen -->
+                <div class="hidden w-[250px] min-h-screen fixed z-50 top-0 content-start bg-[#EEEEEE] shadow-md" id="sidebarlistmobile">
+                    <div class="flex w-full justify-end">
+                        <button onclick="showHideMenu()" class="bg-[#EEEEEE] min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'close.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                    </div>
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                <!-- Side bar starts here -->
+                <div class="hidden min-[1030px]:grid col-span-2 content-start bg-[#EEEEEE] shadow-md" id="sidebarlist">
+                    <div class="w-full">
+                        <p class="grid text-[20px] font-bold text-center">Hotel</p>
+                        <p class="grid text-[20px] font-bold text-center">Management</p>
+                    </div>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/dashboard'
+                    >
+                        <img src="{% static 'home.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Dashboard</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                        href='/stuff/reservation'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-[#434242] ">Reservation</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/room'
+                    >
+                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Room</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/guest'
+                    >
+                        <img src="{% static 'guest.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Guest</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2 bg-[#22A39F]"
+                         href='/stuff/booked'
+                    >
+                        <img src="{% static 'booking.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="font-bold ml-3 pt-1 text-white">Booked</p>
+                    </a>
+                    <a 
+                        class="flex mt-5 content-center p-2"
+                         href='/stuff/cleaning'
+                    >
+                        <img src="{% static 'cleaning.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                        <p class="text-[#434242] font-bold ml-3 pt-1">Cleaning</p>
+                    </a>
+                    {% if userTitle == 'manager' %}
+                        <a 
+                            class="flex mt-5 content-center p-2"
+                            href='/stuff/stuff'
+                        >
+                            <img src="{% static 'stuff.png' %}" class="bg-cover w-[30px] h-[30px] ml-10 justify-center content-center"/>
+                            <p class="text-[#434242] font-bold ml-3 pt-1">Stuff</p>
+                        </a>
+                    {% endif %}
+                </div> 
+                <!-- Side bar ends here -->
+                
+                <div class="grid content-start min-[1030px]:col-span-10 bg-white">
+                    <div class="max-[1030px]:flex hidden">
+                        <button onclick="showSideMenu()" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                            <img src="{% static 'menu.png' %}" class="w-[40px] h-[40px]" />
+                        </button>
+                        <p class="font-bold text-[30px] mb-2 text-gray-400 ml-5">Booking</p>
+                    </div>
+                    <div class="grid min-[1030px]:grid-cols-12 min-[1030px]:justify-end min-[1030px]:content-start bg-[#EEEEEE] w-full pt-5 min-[1030px]:pr-10 min-[1030px]:pl-10 min-[1030px]:pb-10">
+                        <div class="flex content-center min-[1030px]:col-span-7 ">
+                            <div class="grid min-[1030px]:content-center w-full">
+                                <div class="grid min-[1030px]:flex content-center justify-center mt-5 w-full">
+                                    <p class="font-bold text-[30px] mb-2 text-gray-400 mr-5 hidden min-[1030px]:flex">Guest</p>
+                                    <div class="flex content-center justify-center w-full">
+                                        <div class="grid w-full content-center">
+                                            <form method="post" for="searchForm" id="searchForm" class="w-screen min-[1030px]:w-full"> 
+                                                <input hidden name="formFor" value="searchForm"/> 
+                                                <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                                    </div>
+                                                    <input type="number" name="search" id="search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#22A39F] focus:border-[#22A39F] dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#22A39F] dark:focus:border-[#22A39F] h-[40px]" placeholder="Search Using Booking Number..." required>
+                                                    <button type="submit" class="text-white absolute right-2.5 bottom-0.5 bg-[#22A39F] hover:bg-[#22A39F] focus:ring-4 focus:outline-none focus:ring-[#22A39F] font-medium rounded-lg text-sm px-4 py-2 dark:bg-[#22A39F] dark:hover:bg-[#22A39F] dark:focus:ring-[#22A39F]">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid min-[1030px]:flex min-[1030px]:justify-end min-[1030px]:content-start w-full min-[1030px]:col-span-5 ">
+                            <div class="grid content-center max-[1030px]:m-5">
+                                <form action="/staffAccount/logout/" method="post" >
+                                    <input hidden name="actionType" value="logout" />
+                                    <button type="submit" class="bg-white min-[1030px]:h-[50px] text-black w-[80px] min-[1030px]:w-[150px] rounded-md shadow-lg min-[1030px]:p-2 font-bold grid justify-center content-center" >
+                                        Log Out
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="flex min-[1030px]:content-center min-[1030px]:justify-center max-[1030px]:mb-5">
+                                <div class="grid content-center">
+                                    <img src="{% static 'userPic.png' %}" class="bg-cover w-[40px] h-[40px] min-[1030px]:ml-10 rounded-full mr-2 "/>
+                                </div>
+                                <div class="grid content-center">
+                                    <p class="font-bold text-[16px] capitalize">{{staffName}}</p>
+                                    <p class="font-bold text-gray-400 text-[12px] capitalize">{{userTitle}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="min-[1030px]:h-[110px] w-full bg-[#EEEEEE] grid  min-[1030px]:content-center pl-10 max-[1030px]:pb-5">
+                        <div class="grid min-[1030px]:grid-cols-12 min-[1030px]:content-start">
+                            <div class="grid content-center justify-start min-[1030px]:col-span-2">
+                                <p class="font-bold text-[24px] text-black" id="date"></p>
+                            </div>
+                            <div class="flex flex-wrap min-[1030px]:content-center min-[1030px]:justify-end min-[1030px]:col-span-10 min-[1030px]:pr-10">
+                                <div class="grid content-center justify-center">
+                                    <div class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] text-white">
+                                        <img src="{% static 'room.png' %}" class="bg-cover w-[30px] h-[20px] mt-3"/>
+                                        <!-- <p class="ml-3 font-bold">All room</p> -->
+                                        <form class="flex" method="post" for="filterFormSelect" id="filterFormSelect">
+                                            <input hidden name="formFor" value="filterFormSelect"/>
+                                            <input hidden name="filterFormSelectValue" id="filterFormSelectValue"/>
+                                            <select onchange="getSelectedValue()"  id="filterSelectedType" class="bg-gray-50 ml-2 border uppercase border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                {% if selectStyle == 'All room'%}
+                                                    <option selected value="All room">All room</option>
+                                                {% endif %}
+                                                {% if selectStyle != 'All room'%}
+                                                    <option selected value="All room">All room</option>
+                                                {% endif %}
+                                                {% for floor in floors %}
+                                                    {% if selectStyle == floor.floorType %}
+                                                        <option selected value='{{ floor.floorType }}'>{{ floor.floorType }}</option>
+                                                    {% else %}
+                                                        <option value='{{ floor.floorType }}'>{{ floor.floorType }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="grid content-center m-5">
+                                    <div class="border-[1px] border-gray-300 h-[30px] place-content-center"></div>
+                                </div>
+                                <form class="flex" method="post" for="filterForm" id="filterForm">
+                                    <input hidden name="filterForm" value="all"/>
+                                    <input hidden name="formFor" value="filterForm"/>
+                                    <div class="grid content-center mr-5">
+                                        {% if buttonStyle == 'all'%}
+                                            <button class="pl-2 pr-2 pt-1 pb-1 rounded-md font-bold bg-[#22A39F] text-white">All</button>
+                                        {% else %}
+                                            <button class="bg-white text-black pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">All</button>
+                                        {% endif %}
+                                    </div>
+                                </form>
+                                <form class="flex" method="post" for="filterForm" id="filterForm">
+                                    <input hidden name="filterForm" value="checkIn"/>
+                                    <input hidden name="formFor" value="filterForm"/>
+                                    <div class="grid content-center">
+                                        {% if buttonStyle == 'checkIn' %}
+                                            <button class="bg-[#22A39F] text-white pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">CheckIn</button>
+                                        {% else %}
+                                            <button class="bg-white text-black pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">CheckIn</button>
+                                        {% endif %}
+                                    </div>
+                                </form>
+                                <form class="flex" method="post" for="filterForm" id="filterForm">
+                                    <input hidden name="filterForm" value="checkOut"/>
+                                    <input hidden name="formFor" value="filterForm"/>
+                                    <div class="grid content-center m-5">
+                                        {% if buttonStyle == 'checkOut' %}
+                                            <button class="bg-[#22A39F] text-white pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">CheckOut</button>
+                                        {% else %}
+                                            <button class="bg-white text-black pl-2 pr-2 pt-1 pb-1 rounded-md font-bold">CheckOut</button>
+                                        {% endif %}
+                                    </div>
+                                </form>
+                                <div class="grid content-center mr-5">
+                                    <div class="border-[1px] border-gray-300 h-[30px] place-content-center"></div>
+                                </div>
+                                <div class="grid content-center justify-center">
+                                    <button onclick="location.href='/stuff/reservation'" class="flex pl-2 pr-2 pt-1 pb-1 rounded-md bg-[#22A39F] justify-center content-center">
+                                        <img src="{% static 'add.png' %}" class="bg-cover w-[20px] h-[20px] mt-[1px]"/>
+                                        <p  class=" text-white font-bold pl-4">Create new booking</p>
+                                    </button>
+                                </div>
+                            </div>     
+                        </div>  
+                    </div>
+
+                    <div class="grid grid-cols-12 content-start bg-white">
+
+                        <div class="grid col-span-12 p-3">
+                            <!-- for small screen -->
+                            {% for x in bookingList %}
+                            <div class="w-full grid min-[1030px]:hidden justify-center content-center mb-5 p-1 rounded-sm shadow-sm bg-gray-300">
+                                <div class="grid p-2">
+                                    <p class="font-bold text-black bg-red-200 p-2">Booking no : {{ x.bookingNumber }}  </p>
+                                    <p class="font-bold text-black bg-red-300 p-2"> Full Name : {{ x.firstName }} {{x.middelName}}  {{x.lastName }}</p>
+                                    <p class="font-bold text-black bg-red-200 p-2"> Room Number :  {{ x.roomNumber }}</p>
+                                    <p class="font-bold text-black bg-red-300 p-2">Floor Type : {{ x.roomType }}</p>
+                                    <p class="font-bold text-black bg-red-200 p-2">Total Room Price :  $ {{ x.totalRoomPrice }}</p>
+                                    <p class="font-bold text-black bg-red-300 p-2">Total Extra Service price : $ {{ x.totalExtraServicePrice }}</p>
+                                    <p class="font-bold text-black bg-red-200 p-2"> Sub Total :  $ {{ x.subTotal}}</p>
+                                    <div class="font-bold text-black flex flex-wrap">
+                                        <form class="flex" method="post" for="checkInForm" id="checkInForm">
+                                            <input hidden name="checkInValInput" id="checkInValInput"/>
+                                            <input hidden name="formFor" value="checkInFormType"/>
+                                        </form>
+                                        {% if x.isCheckedIn == 'true' %}
+                                        <button disabled class="m-2 bg-pink-300 text-white font-bold p-2 rounded-md" >Checked In</button>
+                                        {% endif %}
+                                        {% if x.isCheckedIn == 'false' %}
+                                        <button class="m-2 bg-pink-500 text-white font-bold p-2 rounded-md" onclick="checkIn(id='{{x.id}}')">CheckIn</button>
+                                        {% endif %}
+                                        <form class="flex" method="post" for="checkOutForm" id="checkOutForm">
+                                            <input hidden name="checkOutValInput" id="checkOutValInput"/>
+                                            <input hidden name="checkOutRoomNumberValInput" id="checkOutRoomNumberValInput"/>
+                                            <input hidden name="formFor" value="checkOutFormType"/>
+                                        </form>
+                                        {% if x.isCheckedOut == 'true' %}
+                                        <button disabled class="m-2 bg-pink-300 text-white font-bold p-2 rounded-md" >CheckedOut</button>
+                                        {% endif %}
+                                        {% if x.isCheckedOut == 'false' %}
+                                        <button class="m-2 bg-pink-500 text-white font-bold p-2 rounded-md" onclick="checkOut( id='{{x.id}}' , roomNumber='{{x.roomNumber}}')">CheckOut</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex">
+                                        <button 
+                                            class="m-2 bg-green-600 text-white font-bold p-2 rounded-md" 
+                                            onclick="showInvoice(
+                                                bookingNumber='{{x.bookingNumber}}',
+                                                firstName='{{x.firstName}}',
+                                                middleName='{{x.middelName}}',
+                                                lastName='{{x.lastName}}',
+                                                contactNumber='{{x.contactNumber}}',
+                                                email='{{x.email}}',
+                                                address='{{x.address}}',
+                                                idCardType='{{x.idCardType}}',
+                                                idCardNumber='{{x.idCardNumber}}',
+                                                roomNumber='{{x.roomNumber}}',
+                                                roomType='{{x.roomType}}',
+                                                checkIn='{{x.checkIn}}',
+                                                checkOut='{{x.checkOut}}',
+                                                paymentStatus='{{x.paymentStatus}}',
+                                                extraServices='{{x.extraServices}}',
+                                                totalRoomPrice='{{x.totalRoomPrice}}',
+                                                subTotal='{{x.subTotal}}',
+                                                totalExtraServicePrice='{{x.totalExtraServicePrice}}',
+                                                )
+                                            "
+                                        >Invoice</button>
+                                        <button 
+                                            class="m-2 bg-blue-600 text-white font-bold p-2 rounded-md" 
+                                            onclick="showView(
+                                                bookingNumber='{{x.bookingNumber}}',
+                                                firstName='{{x.firstName}}',
+                                                middleName='{{x.middelName}}',
+                                                lastName='{{x.lastName}}',
+                                                contactNumber='{{x.contactNumber}}',
+                                                email='{{x.email}}',
+                                                address='{{x.address}}',
+                                                idCardType='{{x.idCardType}}',
+                                                idCardNumber='{{x.idCardNumber}}',
+                                                roomNumber='{{x.roomNumber}}',
+                                                roomType='{{x.roomType}}',
+                                                checkIn='{{x.checkIn}}',
+                                                checkOut='{{x.checkOut}}',
+                                                paymentStatus='{{x.paymentStatus}}',
+                                                extraServices='{{x.extraServices}}',
+                                                subTotal='{{x.subTotal}}',
+                                                )
+                                            "
+                                        >View</button>
+                                        <button 
+                                            class="m-2 bg-yellow-600 text-white font-bold p-2 rounded-md"
+                                            onclick="showEdit(
+                                                id='{{x.id}}',
+                                                bookingNumber='{{x.bookingNumber}}',
+                                                firstName='{{x.firstName}}',
+                                                middleName='{{x.middelName}}',
+                                                lastName='{{x.lastName}}',
+                                                contactNumber='{{x.contactNumber}}',
+                                                email='{{x.email}}',
+                                                address='{{x.address}}',
+                                                idCardType='{{x.idCardType}}',
+                                                idCardNumber='{{x.idCardNumber}}',
+                                                roomNumber='{{x.roomNumber}}',
+                                                roomType='{{x.roomType}}',
+                                                checkIn='{{x.checkIn}}',
+                                                checkOut='{{x.checkOut}}',
+                                                paymentStatus='{{x.paymentStatus}}',
+                                                extraServices='{{x.extraServices}}',
+                                                subTotal='{{x.subTotal}}',
+                                                )
+                                            "
+                                        >Edit</button>
+                                        <button class="m-2 bg-red-600 text-white font-bold p-2 rounded-md" onclick="showDelete(id='{{x.id}}',roomNumber='{{x.roomNumber}}')" >Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div>
+                                <p class="text-black font-bold">No result!</p>
+                            </div>
+                            {% endfor %}
+
+                            <!-- For big screen -->
+                            <table class=" max-[1030px]:hidden w-full text-sm text-left text-gray-500 dark:text-gray-400 font-bold">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                  <tr class="font-extrabold">
+                                    <th scope="col" class="px-1 py-1  bg-red-300">
+                                        Booking no.
+                                    </th>
+                                    <th scope="col" class="px-2 py-1 bg-red-200">
+                                        Full Name
+                                    </th>
+                                    <th scope="col" class="px-2 py-3 bg-red-300">
+                                        Room Number
+                                    </th>
+                                    <th scope="col" class="px-2 py-1 bg-red-200">
+                                        Floor Type
+                                    </th>
+                                    <th scope="col" class="px-2 py-1 bg-red-300">
+                                        CheckIn
+                                    </th>
+                                    <th scope="col" class="px-2 py-1 bg-red-200">
+                                        CheckOut
+                                    </th>
+                                    <th scope="col" class="px-2 py-1 bg-red-300">
+                                        Total Room Price
+                                    </th>
+                                    <th scope="col" class="px-2 py-1 bg-red-200">
+                                        Total Extra Service price
+                                    </th>
+                                    <th scope="col" class="px-2 py-1 bg-red-300">
+                                        Sub Total
+                                    </th>
+                                    <th scope="col" class="px-2 py-1 bg-red-200">
+                                        Action
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for x in bookingList %}
+                                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 uppercase">
+                                        <td scope="row" class="px-1 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ x.bookingNumber }}</td>
+                                        <td class="px-1 py-4">
+                                            {{ x.firstName }} {{x.middelName}}  {{x.lastName }} 
+                                        </td>
+                                        <td class="px-1 py-3">
+                                            {{ x.roomNumber }}
+                                        </td>
+                                        <td class="px-2 py-3">
+                                            {{ x.roomType }}
+                                        </td>
+                                        <td class="px-2 py-3">
+                                            <form class="flex" method="post" for="checkInForm" id="checkInForm">
+                                                <input hidden name="checkInValInput" id="checkInValInput"/>
+                                                <input hidden name="formFor" value="checkInFormType"/>
+                                            </form>
+                                            {% if x.isCheckedIn == 'true' %}
+                                            <button disabled class="m-2 bg-pink-300 text-white font-bold p-2 rounded-md" >Checked In</button>
+                                            {% endif %}
+                                            {% if x.isCheckedIn == 'false' %}
+                                            <button class="m-2 bg-pink-500 text-white font-bold p-2 rounded-md" onclick="checkIn(id='{{x.id}}')">CheckIn</button>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-2 py-3">
+                                            <form class="flex" method="post" for="checkOutForm" id="checkOutForm">
+                                                <input hidden name="checkOutValInput" id="checkOutValInput"/>
+                                                <input hidden name="checkOutRoomNumberValInput" id="checkOutRoomNumberValInput"/>
+                                                <input hidden name="formFor" value="checkOutFormType"/>
+                                            </form>
+                                            {% if x.isCheckedOut == 'true' %}
+                                            <button disabled class="m-2 bg-pink-300 text-white font-bold p-2 rounded-md" >CheckedOut</button>
+                                            {% endif %}
+                                            {% if x.isCheckedOut == 'false' %}
+                                            <button class="m-2 bg-pink-500 text-white font-bold p-2 rounded-md" onclick="checkOut( id='{{x.id}}' , roomNumber='{{x.roomNumber}}')">CheckOut</button>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-3 py-3">
+                                           $ {{ x.totalRoomPrice }}
+                                        </td>
+                                        <td class="px-3 py-3">
+                                           $ {{ x.totalExtraServicePrice }}
+                                        </td>
+                                        <td class="px-3 py-3">
+                                           $ {{ x.subTotal}}
+                                        </td>
+                                        <td class="px-1 py-3">
+                                            <div class="flex">
+                                                <button 
+                                                    class="m-2 bg-green-600 text-white font-bold p-2 rounded-md" 
+                                                    onclick="showInvoice(
+                                                        bookingNumber='{{x.bookingNumber}}',
+                                                        firstName='{{x.firstName}}',
+                                                        middleName='{{x.middelName}}',
+                                                        lastName='{{x.lastName}}',
+                                                        contactNumber='{{x.contactNumber}}',
+                                                        email='{{x.email}}',
+                                                        address='{{x.address}}',
+                                                        idCardType='{{x.idCardType}}',
+                                                        idCardNumber='{{x.idCardNumber}}',
+                                                        roomNumber='{{x.roomNumber}}',
+                                                        roomType='{{x.roomType}}',
+                                                        checkIn='{{x.checkIn}}',
+                                                        checkOut='{{x.checkOut}}',
+                                                        paymentStatus='{{x.paymentStatus}}',
+                                                        extraServices='{{x.extraServices}}',
+                                                        totalRoomPrice='{{x.totalRoomPrice}}',
+                                                        subTotal='{{x.subTotal}}',
+                                                        totalExtraServicePrice='{{x.totalExtraServicePrice}}',
+                                                        )
+                                                    "
+                                                >Invoice</button>
+                                                <button 
+                                                    class="m-2 bg-blue-600 text-white font-bold p-2 rounded-md" 
+                                                    onclick="showView(
+                                                        bookingNumber='{{x.bookingNumber}}',
+                                                        firstName='{{x.firstName}}',
+                                                        middleName='{{x.middelName}}',
+                                                        lastName='{{x.lastName}}',
+                                                        contactNumber='{{x.contactNumber}}',
+                                                        email='{{x.email}}',
+                                                        address='{{x.address}}',
+                                                        idCardType='{{x.idCardType}}',
+                                                        idCardNumber='{{x.idCardNumber}}',
+                                                        roomNumber='{{x.roomNumber}}',
+                                                        roomType='{{x.roomType}}',
+                                                        checkIn='{{x.checkIn}}',
+                                                        checkOut='{{x.checkOut}}',
+                                                        paymentStatus='{{x.paymentStatus}}',
+                                                        extraServices='{{x.extraServices}}',
+                                                        totalRoomPrice='{{x.totalRoomPrice}}',
+                                                        subTotal='{{x.subTotal}}',
+                                                        totalExtraServicePrice='{{x.totalExtraServicePrice}}',
+                                                        )
+                                                    "
+                                                >View</button>
+                                                <button 
+                                                    class="m-2 bg-yellow-600 text-white font-bold p-2 rounded-md"
+                                                    onclick="showEdit(
+                                                        id='{{x.id}}',
+                                                        bookingNumber='{{x.bookingNumber}}',
+                                                        firstName='{{x.firstName}}',
+                                                        middleName='{{x.middelName}}',
+                                                        lastName='{{x.lastName}}',
+                                                        contactNumber='{{x.contactNumber}}',
+                                                        email='{{x.email}}',
+                                                        address='{{x.address}}',
+                                                        idCardType='{{x.idCardType}}',
+                                                        idCardNumber='{{x.idCardNumber}}',
+                                                        roomNumber='{{x.roomNumber}}',
+                                                        roomType='{{x.roomType}}',
+                                                        checkIn='{{x.checkIn}}',
+                                                        checkOut='{{x.checkOut}}',
+                                                        paymentStatus='{{x.paymentStatus}}',
+                                                        extraServices='{{x.extraServices}}',
+                                                        total='{{x.total}}',
+                                                        )
+                                                    "
+                                                >Edit</button>
+                                                <button class="m-2 bg-red-600 text-white font-bold p-2 rounded-md" onclick="showDelete(id='{{x.id}}',roomNumber='{{x.roomNumber}}')" >Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td class="text-black font-bold">No result!</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                              </table>
+                              ​
+                        </div>
+                    </div>
+                    <nav aria-label="Page navigation example" class="flex justify-end ml-5 step-links">
+                        <ul class="flex w-full justify-end -space-x-px mt-10 mb-5">
+                            {% if bookingList.has_previous %}
+                            <li>
+                                <!-- <a href="?page=1">&laquo; first</a> -->
+                                <a href="?page={{ bookingList.previous_page_number }}" class="px-3 bg-blue-600 py-2 ml-0 leading-tight text-white border border-gray-300 rounded-l-lg  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">Previous</a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a class="px-3 bg-blue-300 py-2 ml-0 leading-tight text-white border border-gray-300 rounded-l-lg  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400" >Previous</a>
+                            </li>
+                            {% endif %}
+                            {% for i in numPageList %}
+                                {%  if i == bookingList.number %}
+                                <li>
+                                    <a  class="px-3 py-2 leading-tight text-black border border-gray-300   dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{i }}</a>
+                                </li>
+                                {%  else %}
+                                <li>
+                                    <a href="?page={{i}}" class="px-3 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{i }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if bookingList.has_next %}
+                            <li>
+                                <a href="?page={{ bookingList.paginator.num_pages }}" class="px-3 py-2 leading-tight text-white bg-blue-600 border border-gray-300 rounded-r-lg dark:border-gray-700 dark:text-gray-400 ">Next</a>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a  class="px-3 py-2 leading-tight text-white bg-blue-300 border border-gray-300 rounded-r-lg dark:border-gray-700 dark:text-gray-400 ">Next</a>
+                            </li>              
+                            {% endif %}
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    const d = new Date();
+    document.getElementById("date").innerHTML = d.toDateString();
+
+    function hideView(){
+        document.getElementById("viewBookedDetail").style.display = 'none';
+    }
+    function hideInvoice(){
+        document.getElementById("invoiceDetail").style.display = 'none';
+    }
+    function hideEdit(){
+        document.getElementById("editBookedDetail").style.display = 'none';
+    }
+    function hidePay(){
+        enableScrolling()
+        document.getElementById("payBoooked").style.display = 'none';
+    }
+    function hideDelete(){
+        enableScrolling()
+        document.getElementById("deleteBoooked").style.display = 'none';
+    }
+
+    function showInvoice(bookingNumber,firstName,middleName,lastName,contactNumber,email,address,idCardType,idCardNumber,roomNumber,roomType,checkIn,checkOut,paymentStatus,extraServices,totalRoomPrice,subTotal,totalExtraServicePrice){
+        document.getElementById("invoiceDetail").style.display = 'grid';
+        window.scrollTo(0,0)
+        //document.getElementById("bookingNumberValInvoice").innerHTML=bookingNumber;
+        document.getElementById("firstNameValInvoice").innerHTML=firstName;
+        document.getElementById("middleNameValInvoice").innerHTML=middleName;
+        document.getElementById("lastNameValInvoice").innerHTML=lastName;
+        //document.getElementById("contactNumberValInvoice").innerHTML=contactNumber;
+        //document.getElementById("emailValInvoice").innerHTML=email;
+        document.getElementById("addressValInvoice").innerHTML=address;
+       // document.getElementById("idCardTypeValInvoice").innerHTML=idCardType;
+       // document.getElementById("idCardNumberValInvoice").innerHTML=idCardNumber;
+        //document.getElementById("roomNumberValInvoice").innerHTML=roomNumber;
+        document.getElementById("floorTypeValInvoice").innerHTML=roomType;
+        //document.getElementById("checkInValInvoice").innerHTML=checkIn;
+        //document.getElementById("checkOutValInvoice").innerHTML=checkOut;
+       // document.getElementById("paymentStatusValInvoice").innerHTML=paymentStatus;
+        document.getElementById("extraServicesValInvoice").innerHTML=extraServices;
+        document.getElementById("totalValInvoice").innerHTML=subTotal;
+        document.getElementById("roomValinvoice").innerHTML=totalRoomPrice;
+        document.getElementById("extrainvoiceval").innerHTML=totalExtraServicePrice;
+    }
+    function showView(bookingNumber,firstName,middleName,lastName,contactNumber,email,address,idCardType,idCardNumber,roomNumber,roomType,checkIn,checkOut,paymentStatus,extraServices,totalRoomPrice,subTotal,totalExtraServicePrice){
+        document.getElementById("viewBookedDetail").style.display = 'grid';
+        window.scrollTo(0,0)
+        document.getElementById("bookingNumberVal").innerHTML=bookingNumber;
+        document.getElementById("firstNameVal").innerHTML=firstName;
+        document.getElementById("middleNameVal").innerHTML=middleName;
+        document.getElementById("lastNameVal").innerHTML=lastName;
+        document.getElementById("contactNumberVal").innerHTML=contactNumber;
+        document.getElementById("emailVal").innerHTML=email;
+        document.getElementById("addressVal").innerHTML=address;
+        document.getElementById("idCardTypeVal").innerHTML=idCardType;
+        document.getElementById("idCardNumberVal").innerHTML=idCardNumber;
+        document.getElementById("roomNumberVal").innerHTML=roomNumber;
+        document.getElementById("floorTypeVal").innerHTML=roomType;
+        document.getElementById("checkInVal").innerHTML=checkIn;
+        document.getElementById("checkOutVal").innerHTML=checkOut;
+        document.getElementById("paymentStatusVal").innerHTML=paymentStatus;
+        document.getElementById("extraServicesVal").innerHTML=extraServices;
+        document.getElementById("totalVal").innerHTML=subTotal;
+    }
+    function showPay(total,id){
+        window.scrollTo(0,0)
+        disableScrolling()
+        var bookedIdInput = document.getElementById("BookedIdVal");
+        bookedIdInput.value = id;
+        document.getElementById("payBoooked").style.display = 'grid';
+        document.getElementById("payTotalVal").innerHTML=total;
+    }
+    function showEdit(id,bookingNumber,firstName,middleName,lastName,contactNumber,email,address,idCardType,idCardNumber,roomNumber,roomType,checkIn,checkOut,paymentStatus,extraServices,total){
+        document.getElementById("editBookedDetail").style.display = 'grid';
+        window.scrollTo(0,0)
+        checkInNum=1
+        checkOutNum=1
+
+        let m=checkIn.split(' ')
+        n=m[1]
+        chechInDay=n.replace(',','').trim()
+        chechInYear=m[2]
+
+        let k=checkOut.split(' ')
+        t=k[1]
+        chechOutDay=t.replace(',','').trim()
+        chechOutYear=m[2]
+
+        if(chechInDay === '1'){
+            chechInDay='01'
+        }
+        else if(chechInDay === '2'){
+            chechInDay='02'
+        }
+        else if(chechInDay === '3'){
+            chechInDay='03'
+        }
+        else if(chechInDay === '4'){
+            chechInDay='04'
+        }
+        else if(chechInDay === '5'){
+            chechInDay='05'
+        }
+        else if(chechInDay === '6'){
+            chechInDay='06'
+        }
+        else if(chechInDay === '7'){
+            chechInDay='07'
+        }
+        else if(chechInDay === '8'){
+            chechInDay='08'
+        }
+        else if(chechInDay === '9'){
+            chechInDay='09'
+        }
+
+        if(chechOutDay === '1'){
+            chechOutDay='01'
+        }
+        else if(chechOutDay === '2'){
+            chechOutDay='02'
+        }
+        else if(chechOutDay === '3'){
+            chechOutDay='03'
+        }
+        else if(chechOutDay === '4'){
+            chechOutDay='04'
+        }
+        else if(chechOutDay === '5'){
+            chechOutDay='05'
+        }
+        else if(chechOutDay === '6'){
+            chechOutDay='06'
+        }
+        else if(chechOutDay === '7'){
+            chechOutDay='07'
+        }
+        else if(chechOutDay === '8'){
+            chechOutDay='08'
+        }
+        else if(chechOutDay === '9'){
+            chechOutDay='09'
+        }
+
+        if(checkIn.toLowerCase().includes('jan')){
+            checkInNum='01'
+        }
+        else if(checkIn.toLowerCase().includes('feb')){
+            checkInNum='02'
+        }
+        else if(checkIn.toLowerCase().includes('mar')){
+            checkInNum='03'
+        }
+        else if(checkIn.toLowerCase().includes('apr')){
+            checkInNum='04'
+        }
+        else if(checkIn.toLowerCase().includes('may')){
+            checkInNum='05'
+        }
+        else if(checkIn.toLowerCase().includes('jun')){
+            checkInNum='06'
+        }
+        else if(checkIn.toLowerCase().includes('jul')){
+            checkInNum='07'
+        }
+        else if(checkIn.toLowerCase().includes('aug')){
+            checkInNum='08'
+        }
+        else if(checkIn.toLowerCase().includes('sep')){
+            checkInNum='09'
+        }
+        else if(checkIn.toLowerCase().includes('oct')){
+            checkInNum='10'
+        }
+        else if(checkIn.toLowerCase().includes('nov')){
+            checkInNum='11'
+        }
+        else if(checkIn.toLowerCase().includes('dec')){
+            checkInNum='12'
+        }
+
+        if(checkOut.toLowerCase().includes('jan')){
+            checkOutNum='01'
+        }
+        else if(checkOut.toLowerCase().includes('feb')){
+            checkOutNum='02'
+        }
+        else if(checkOut.toLowerCase().includes('mar')){
+            checkOutNum='03'
+        }
+        else if(checkOut.toLowerCase().includes('apr')){
+            checkOutNum='04'
+        }
+        else if(checkOut.toLowerCase().includes('may')){
+            checkOutNum='05'
+        }
+        else if(checkOut.toLowerCase().includes('jun')){
+            checkOutNum='06'
+        }
+        else if(checkOut.toLowerCase().includes('jul')){
+            checkOutNum='07'
+        }
+        else if(checkOut.toLowerCase().includes('aug')){
+            checkOutNum='08'
+        }
+        else if(checkOut.toLowerCase().includes('sep')){
+            checkOutNum='09'
+        }
+        else if(checkOut.toLowerCase().includes('oct')){
+            checkOutNum='10'
+        }
+        else if(checkOut.toLowerCase().includes('nov')){
+            checkOutNum='11'
+        }
+        else if(checkOut.toLowerCase().includes('dec')){
+            checkOutNum='12'
+        }
+
+        checkInFormat=chechInYear+'-'+checkInNum+'-'+chechInDay
+        checkOutFormat=chechOutYear+'-'+checkOutNum+'-'+chechOutDay
+
+
+        document.getElementById("inputbookingIdVal").value=id;
+        document.getElementById("inputbookingNumberVal").value=bookingNumber;
+        document.getElementById("inputfirstNameVal").value=firstName;
+        document.getElementById("inputmiddleNameVal").value=middleName;
+        document.getElementById("inputlastNameVal").value=lastName;
+        document.getElementById("inputcontactNumberVal").value=contactNumber;
+        document.getElementById("inputemailVal").value=email;
+        document.getElementById("inputaddressVal").value=address;
+        document.getElementById("inputidCardTypeVal").value=idCardType;
+        document.getElementById("inputidCardNumberVal").value=idCardNumber;
+        document.getElementById("inputroomNumberVal").value=roomNumber;
+        document.getElementById("inputroomNumberOriginalVal").value=roomNumber;
+        document.getElementById("inputfloorTypeVal").value=roomType;
+        document.getElementById("inputcheckInVal").defaultValue=checkInFormat;
+        document.getElementById("inputcheckOutVal").defaultValue=checkOutFormat;
+        document.getElementById("inputpaymentStatusVal").value=paymentStatus;
+        document.getElementById("inputextraServicesVal").value=extraServices;
+        document.getElementById("inputtotalVal").value=total;
+    }
+    function showDelete(id,roomNumber){
+        window.scrollTo(0,0)
+        disableScrolling()
+        document.getElementById("deleteIdVal").value=id;
+        document.getElementById("deleteRoomNumberVal").value=roomNumber;
+        document.getElementById("deleteBoooked").style.display = 'grid';
+    }
+
+    function disableScrolling() {
+        TopScroll =0;
+        LeftScroll =0,
+        window.scrollTo(LeftScroll, TopScroll);
+        window.onscroll = function() {
+            window.scrollTo(LeftScroll, TopScroll);
+        };
+    }
+        
+    function enableScrolling() {
+    window.onscroll = function() {};
+    }
+
+    function setUserAnswer(answer){
+        if(answer === 'yes'){
+            document.getElementById("bookedPayment").submit();
+        }else{
+            hidePay()
+        }
+    }
+    function getSelectedValue(){
+        var e = document.getElementById("filterSelectedType");
+        var selectedValue = e.options[e.selectedIndex].text;
+
+        var filterVal = document.getElementById("filterFormSelectValue");
+        filterVal.value = selectedValue;
+
+        document.getElementById("filterFormSelect").submit();
+    }
+
+    function checkIn(id){
+        document.getElementById("checkInValInput").value=id;
+        document.getElementById("checkInForm").submit();
+    }
+    function checkOut(id,roomNumber){
+        document.getElementById("checkOutValInput").value=id;
+        document.getElementById("checkOutRoomNumberValInput").value=roomNumber;
+        document.getElementById("checkOutForm").submit();
+    }
+    function showHideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+        document.getElementById("sidebarlistmobile").classList.add('hidden')
+    }
+    function showSideMenu(){
+        document.getElementById("sidebarlistmobile").classList.remove('hidden')
+        document.getElementById("sidebarlistmobile").classList.remove('grid')
+    }
+</script>

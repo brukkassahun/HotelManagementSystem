@@ -1,0 +1,226 @@
+{% load tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="xxxxx">
+        <title>Book</title>
+        {% tailwind_preload_css %}
+        {% tailwind_css %}
+    </head>
+    
+    <body>
+        <div class="w-screen min-h-screen bg-gray-300">
+            <div class="w-full min-h-screen grid relative h-[500px] bg-gray-300">
+                <img src="{% static 'floor4.jpg' %}" class="bg-cover w-full h-screen"/>
+                <div class="w-screen grid justify-center content-start absolute z-20 top-0">
+
+                    <h1 class="text-center font-bold text-white text-[30px] mb-10">
+                        Hello {{request.user.username}} <br/>  welcome!
+                    </h1>
+                    
+                    <div class="flex w-full justify-center">
+                        <div class="grid min-[1030px]:w-[70%] bg-gray-400 mb-10">
+                            <div class="w-full grid mt-10 pl-10 pr-10 bg-gray-400">
+                                <form class="w-full grid bg-gray-400" method="post" for="reservationForm" id="reservationForm">
+                                    {% csrf_token %}
+                                    <div class="grid">
+                                        <p class="text-center uppercase mt-2 mb-10 text-[28px] font-bold">We have a wide selection of rooms available, and we're sure you'll find one that fits your needs. </p>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div class="relative z-0 w-full mb-10 mr-5">
+                                                <label for="roomType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room Type</label>
+                                                <select onchange="getSelectedValue()"  id="roomType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                    <option selected>----</option>
+                                                    {% for floor in floors %}
+                                                        <option value='{{ floor.floorType }}'>{{ floor.floorType }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="relative z-0 w-full mb-10 mr-5">
+                                                <label for="roomNumber" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room Number</label>
+                                                <select onchange="getSelectedRoomValue()" id="roomNumberSelect" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                    <option selected>----</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div class="relative z-0 w-full mb-10 mr-5">
+                                                <input name="formType" value="reservationData" hidden />
+                                                <input type="date" name="floating_check_in" id="floating_check_in" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                                <label for="floating_check_in" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Check-In</label>
+                                            </div>
+                                            <div class="relative z-0 w-full mb-10">
+                                                <input type="date" name="floating_check_out" id="floating_check_out" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                                <label for="floating_check_out" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Check-Out</label>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div class="relative z-0 w-full mb-10 mr-5">
+                                                <label for="extraServicesId" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Extra Services</label>
+                                                <select onchange="getExtraServices()" id="extraServicesId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                    <option value="None" selected>----</option>
+                                                    {% for e in extraServices%}
+                                                        <option value={{e.id}}>{{e.serviceType}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-left mt-2 mb-10 text-[28px] font-bold">Your Details</p>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div class="relative z-0 w-full mb-10 mr-5">
+                                            <input type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">First Name</label>
+                                        </div>
+                                        <div class="relative z-0 w-full mb-10">
+                                            <input type="text" name="floating_middle_name" id="floating_middle_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_middle_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Middle Name</label>
+                                        </div>
+                                        <div class="relative z-0 w-full mb-10">
+                                            <input type="text" name="floating_last_name" id="floating_last_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Last Name</label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="grid grid-cols-3 gap-2 mt-5">
+                                        <div class="relative z-0 w-full mb-10 mr-5">
+                                            <input type="text" name="floating_contact_number" id="floating_contact_number" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_contact_number" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Contact Number</label>
+                                        </div>
+                                        <div class="relative z-0 w-full mb-10">
+                                            <input type="email" name="floating_email" id="floating_email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Email Address</label>
+                                        </div>
+                                        <div class="relative z-0 w-full mb-10">
+                                            <input type="text" name="floating_address" id="floating_address" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_address" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Residential Address</label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="grid grid-cols-2 gap-2 ">
+                                        <div class="relative z-0 w-full mb-10 mr-5">
+                                            <label for="idChoice" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Id Card Type</label>
+                                            <select onchange="getSelectedIdCardTypeValue()" id="idChoice" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <option selected>----</option>
+                                                <option value="national id card">National Id Card</option>
+                                                <option value="passport">Passport</option>
+                                                <option value="driver license">Driver License</option>
+                                            </select>
+                                        </div>
+                                        <div class="relative z-0 w-full mb-10 mt-7 ml-5">
+                                            <input type="text" name="floating_selected_id_card_number" id="floating_selected_id_card_number" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 " placeholder=" " required />
+                                            <label for="floating_selected_id_card_number" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 font-bold">Selected Id Card Number</label>
+                                        </div>
+                                    </div>
+                                    <input name="extraServiceSelected" value="None" id="extraServiceSelected" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                                    <input name="bookingNumber" value="" id="bookingNumber" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                                    <input name="roomTypeSelectedValue" value="" id="roomTypeSelectedValue" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                                    <input name="roomNumberSelectedValue" value="" id="roomNumberSelectedValue" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;"  required />
+                                    <input name="idChoiceSelectedValue" value="" id="idChoiceSelectedValue" style="pointer-events: none;opacity: 0;width: 0;float: left;height:0;" required/>
+                                    <div class="flex justify-center mb-10">
+                                        <button type="submit"  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Book</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>          
+        </div>
+    </body>
+</html>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    const d = new Date();
+    document.getElementById("date").innerHTML = d.toDateString();
+
+    function getSelectedValue(){
+        var e = document.getElementById("roomType");
+        var selectedValue = e.options[e.selectedIndex].text;
+
+
+        var floorTypeInput = document.getElementById("roomTypeSelectedValue");
+        floorTypeInput.value = selectedValue;
+
+        var select = document.getElementById("roomNumberSelect");
+
+        function removeAllChildNodes(parent) {
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+        }
+        removeAllChildNodes(select);
+        getData(selectedValue)
+    }
+
+    function getSelectedRoomValue(){
+        var e = document.getElementById("roomNumberSelect");
+        var roomNumber = e.options[e.selectedIndex].text;
+
+        var floorNumberInput = document.getElementById("roomNumberSelectedValue");
+        floorNumberInput.value = roomNumber;
+    }
+    function getExtraServices(){
+        var e = document.getElementById("extraServicesId");
+        var idCardType = e.options[e.selectedIndex].value;
+
+        var extra_service_input = document.getElementById("extraServiceSelected");
+
+        extra_service_input.value = idCardType;
+    }
+    function getSelectedIdCardTypeValue(){
+        const d = new Date();
+        let yr = d.getFullYear();
+        let mnt = d.getMonth()
+        let dy = d.getDay()
+        let hrs = d.getHours()
+        let mns = d.getMinutes()
+        let sec = d.getMilliseconds()
+        var bookin_No_input = document.getElementById("bookingNumber");
+        bookingId=yr+''+mnt+''+dy+''+hrs+''+mns+''+sec;
+        bookin_No_input.value = bookingId.toString();
+
+        var e = document.getElementById("idChoice");
+        var idCardType = e.options[e.selectedIndex].text;
+
+        var idCardTypeInput = document.getElementById("idChoiceSelectedValue");
+        idCardTypeInput.value = idCardType;
+    }
+
+    function getData(selectedValue){
+        var csrf = $("input[name=csrfmiddlewaretoken]").val();
+        $.ajax({                       
+            url: '',       
+            type:'post',
+            data: {
+                'formType':'ajax',
+                'floorType': selectedValue ,
+                'csrfmiddlewaretoken' : csrf
+            },
+            success: function (data) {   
+                var option = document.createElement("option");
+                option.text = "----";
+                option.value = '';
+                var select = document.getElementById("roomNumberSelect");
+                select.appendChild(option);
+                
+                var db = JSON.stringify(data.floorType);
+                var as = JSON.parse(db);
+                as.forEach(myFunction);
+                
+                function myFunction(value, index, array) {
+                    var option = document.createElement("option");
+                    option.text = value;
+                    option.value = value;
+                    var select = document.getElementById("roomNumberSelect");
+                    select.appendChild(option);
+                }
+
+            }
+        });
+    }
+</script>
